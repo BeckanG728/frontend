@@ -23,7 +23,7 @@ document.querySelectorAll('.nav-link').forEach(link => {
 function cerrarSesion() {
     if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
         console.log('Cerrando sesión...');
-        window.location.href = '/miapp/index.html';
+        window.location.href = '../index.html';
     }
 }
 

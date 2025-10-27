@@ -118,7 +118,7 @@ form.addEventListener('submit', async function(e) {
             // Redirigir al dashboard después de 1.5 segundos
             setTimeout(() => {
                 alert('Login exitoso. Redirigiendo al dashboard...');
-                window.location.href='/miapp/dashboard.html'
+                window.location.href='/dashboard/dashboard.html'
             }, 1500);
 
         } else {
