@@ -1,7 +1,9 @@
-let IP = 'localhost';
+
+import { BACKEND_URL } from './config.js';
+
+let API_BASE_URL = `${BACKEND_URL}`;
 
 // Configuración de la API
-let API_BASE_URL = 'http://'+IP+':8080/miapp';
 const LOGIN_ENDPOINT = '/api/auth/login';
 
 const form = document.getElementById('loginForm');
