@@ -2,6 +2,7 @@
 import { BACKEND_URL } from './config.js';
 
 let API_BASE_URL = `${BACKEND_URL}`;
+console.log(API_BASE_URL)
 
 // Configuración de la API
 const LOGIN_ENDPOINT = '/api/auth/login';

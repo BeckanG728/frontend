@@ -1,5 +1,4 @@
-
-import { BACKEND_URL } from './config.js';
+import { BACKEND_URL } from '../../config.js';
 
 let API_BASE_URL = `${BACKEND_URL}`;
 
