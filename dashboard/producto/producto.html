@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Gestión de Productos</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+    <div class="container">
+        <div class="header">
+            <span class="return-dash"><a href="dashboard.html">Inicio</a></span>
+            <h1>Gestión de Productos</h1>
+            <button class="btn-nuevo" onclick="abrirModalNuevo()">+ Nuevo Producto</button>
+        </div>
+
+        <div class="content">
+            <div class="config-section">
+                <label>URL del Servidor (Spring Boot)</label>
+                <input type="text" id="apiUrl" value="http://IP:8080/miapp"
+                    placeholder="http://IP:8080/miapp">
+            </div>
+
+            <div class="alert alert-error" id="alertBox"></div>
+
+            <div class="table-container">
+                <div id="loadingState" class="loading">Cargando productos...</div>
+
+                <div id="emptyState" class="empty-state" style="display: none;">
+                    <svg fill="#999" viewBox="0 0 24 24">
+                        <path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76l1-1.36 1 1.36L15.38 12 17 10.83 14.92 8H20v6z"/>
+                    </svg>
+                    <h3>No hay productos registrados</h3>
+                    <p>Comienza agregando un nuevo producto</p>
+                </div>
+
+                <table id="tablaProductos" style="display: none;">
+                    <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th>Versión</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody-productos">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Crear/Editar -->
+    <div class="modal" id="modalProducto">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitulo">Nuevo Producto</h2>
+            </div>
+            <form id="formProducto">
+                <div class="modal-body">
+                    <input type="hidden" id="productoId">
+                    <input type="hidden" id="productoVersion">
+
+                    <div class="version-info" id="versionInfo" style="display: none;">
+                        <strong>⚠️ Control de Concurrencia:</strong> Este producto tiene versión <span
+                            id="currentVersion"></span>.
+                        Si otro usuario lo modifica mientras editas, se te notificará para recargar los datos.
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nombreProducto">Nombre del Producto *</label>
+                        <input type="text" id="nombreProducto" placeholder="Ingrese el nombre" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="precioProducto">Precio *</label>
+                        <input type="number" id="precioProducto" placeholder="0.00" step="0.01" min="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="stockProducto">Stock *</label>
+                        <input type="number" id="stockProducto" placeholder="0" step="1" min="0" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-guardar">Guardar</button>
+                    <button type="button" class="btn btn-cancelar" onclick="cerrarModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="producto.js"></script>
+    </body>
+</html>

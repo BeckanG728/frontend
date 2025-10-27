@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Clientes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <span class="return-dash"><a href="dashboard.html">Inicio</a></span>
+        <h1>Gestión de Clientes</h1>
+        <button class="btn-nuevo" onclick="abrirModalNuevo()">+ Nuevo Cliente</button>
+    </div>
+
+    <div class="content">
+        <div class="config-section">
+            <label>URL del Servidor (Spring Boot)</label>
+            <input type="text" id="apiUrl" value="http://IP:8080/miapp"
+                   placeholder="http://IP:8080/miapp">
+        </div>
+
+        <div class="alert alert-error" id="alertBox"></div>
+
+        <div class="table-container">
+            <div id="loadingState" class="loading">Cargando clientes...</div>
+
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <svg fill="#999" viewBox="0 0 24 24">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+                <h3>No hay clientes registrados</h3>
+                <p>Comienza agregando un nuevo cliente</p>
+            </div>
+
+            <table id="tablaClientes" style="display: none;">
+                <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody id="tbody-clientes">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Crear/Editar -->
+<div class="modal" id="modalCliente">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modalTitulo">Nuevo Cliente</h2>
+        </div>
+        <form id="formCliente">
+            <div class="modal-body">
+                <input type="hidden" id="clienteId">
+
+                <div class="form-group">
+                    <label for="nombreCliente">Nombre del Cliente *</label>
+                    <input type="text" id="nombreCliente" placeholder="Ingrese el nombre" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-cancelar" onclick="cerrarModal()">Cancelar</button>
+                <button type="submit" class="btn btn-guardar">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="cliente.js"></script>
+</body>
+</html>
