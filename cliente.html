@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes - Sistema DFS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .nav-item {
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-logout {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            color: #2d3748;
+            font-size: 32px;
+        }
+
+        .btn-primary {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(240, 147, 251, 0.3);
+        }
+
+        .search-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: #f093fb;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        thead th {
+            padding: 20px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #e2e8f0;
+            transition: background 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: #f7fafc;
+        }
+
+        tbody td {
+            padding: 20px;
+            color: #2d3748;
+        }
+
+        .cliente-id {
+            font-weight: 700;
+            color: #f5576c;
+        }
+
+        .cliente-nombre {
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-edit, .btn-delete {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit {
+            background: #4299e1;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #3182ce;
+        }
+
+        .btn-delete {
+            background: #f56565;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #e53e3e;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: #2d3748;
+        }
+
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #718096;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #2d3748;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #f093fb;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            padding: 12px;
+            background: #e2e8f0;
+            color: #2d3748;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-save {
+            flex: 1;
+            padding: 12px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .alert-error {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+        }
+
+        .no-clientes {
+            text-align: center;
+            padding: 60px 20px;
+            color: #718096;
+        }
+
+        .no-clientes h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .table-container {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 600px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                <span>🗄️</span>
+                <span>Sistema DFS</span>
+            </div>
+            <div class="navbar-menu">
+                <a href="dashboard.html" class="nav-item">Dashboard</a>
+                <a href="producto.html" class="nav-item">Productos</a>
+                <a href="cliente.html" class="nav-item active">Clientes</a>
+            </div>
+            <div>
+                <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>👥 Gestión de Clientes</h1>
+            <button class="btn-primary" onclick="openModal()">+ Nuevo Cliente</button>
+        </div>
+
+        <div id="alertContainer"></div>
+
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="🔍 Buscar clientes..." 
+                   onkeyup="filterClientes()">
+        </div>
+
+        <div class="table-container">
+            <table id="clientesTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre del Cliente</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="clientesBody">
+                    <tr>
+                        <td colspan="3" class="loading">Cargando clientes...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal Formulario -->
+    <div id="clienteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Nuevo Cliente</h2>
+                <button class="btn-close" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="clienteForm">
+                <input type="hidden" id="clienteId">
+                <div class="form-group">
+                    <label>Nombre del Cliente *</label>
+                    <input type="text" id="clienteName" required 
+                           placeholder="Ingrese el nombre completo">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal()">Cancelar</button>
+                    <button type="submit" class="btn-save">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://backend.tpdteam3.com/backend/api';
+        let clientes = [];
+
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'index.html';
+                return false;
+            }
+            return true;
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = 'index.html';
+        }
+
+        async function loadClientes() {
+            const token = localStorage.getItem('token');
+            try {
+                const response = await fetch(`${API_URL}/clientes`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    clientes = await response.json();
+                    renderClientes(clientes);
+                } else {
+                    showAlert('Error al cargar clientes', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Error de conexión', 'error');
+            }
+        }
+
+        function renderClientes(clients) {
+            const tbody = document.getElementById('clientesBody');
+            
+            if (clients.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="3" class="no-clientes">
+                            <h3>No hay clientes</h3>
+                            <p>Agrega tu primer cliente usando el botón "Nuevo Cliente"</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = clients.map(c => `
+                <tr>
+                    <td class="cliente-id">#${c.codiClie}</td>
+                    <td class="cliente-nombre">${c.nombClie}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-edit" onclick="editCliente(${c.codiClie})">
+                                ✏️ Editar
+                            </button>
+                            <button class="btn-delete" onclick="deleteCliente(${c.codiClie})">
+                                🗑️ Eliminar
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function filterClientes() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = clientes.filter(c => 
+                c.nombClie.toLowerCase().includes(search) || 
+                c.codiClie.toString().includes(search)
+            );
+            renderClientes(filtered);
+        }
+
+        function openModal(id = null) {
+            document.getElementById('clienteModal').classList.add('active');
+            document.getElementById('clienteForm').reset();
+            
+            if (id) {
+                const cliente = clientes.find(c => c.codiClie === id);
+                document.getElementById('modalTitle').textContent = 'Editar Cliente';
+                document.getElementById('clienteId').value = cliente.codiClie;
+                document.getElementById('clienteName').value = cliente.nombClie;
+            } else {
+                document.getElementById('modalTitle').textContent = 'Nuevo Cliente';
+                document.getElementById('clienteId').value = '';
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('clienteModal').classList.remove('active');
+        }
+
+        function editCliente(id) {
+            openModal(id);
+        }
+
+        async function deleteCliente(id) {
+            if (!confirm('¿Estás seguro de eliminar este cliente?')) return;
+
+            const token = localStorage.getItem('token');
+            try {
+                const response = await fetch(`${API_URL}/clientes/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    showAlert('Cliente eliminado exitosamente', 'success');
+                    loadClientes();
+                } else {
+                    showAlert('Error al eliminar cliente', 'error');
+                }
+            } catch (error) {
+                showAlert('Error de conexión', 'error');
+            }
+        }
+
+        document.getElementById('clienteForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const token = localStorage.getItem('token');
+            const id = document.getElementById('clienteId').value;
+            
+            const data = {
+                nombClie: document.getElementById('clienteName').value
+            };
+
+            try {
+                const url = id ? `${API_URL}/clientes/${id}` : `${API_URL}/clientes`;
+                const method = id ? 'PUT' : 'POST';
+                
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    showAlert(`Cliente ${id ? 'actualizado' : 'creado'} exitosamente`, 'success');
+                    closeModal();
+                    loadClientes();
+                } else {
+                    showAlert('Error al guardar cliente', 'error');
+                }
+            } catch (error) {
+                showAlert('Error de conexión', 'error');
+            }
+        });
+
+        function showAlert(message, type) {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            document.getElementById('alertContainer').appendChild(alert);
+            setTimeout(() => alert.remove(), 3000);
+        }
+
+        if (checkAuth()) {
+            loadClientes();
+        }
+    </script>
+</body>
+</html>

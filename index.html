@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Sistema DFS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            width: 100%;
+            max-width: 420px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-login:active {
+            transform: translateY(0);
+        }
+
+        .btn-login:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .alert {
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .alert-error {
+            background: #fee;
+            color: #c33;
+            border: 1px solid #fcc;
+        }
+
+        .alert-success {
+            background: #efe;
+            color: #3c3;
+            border: 1px solid #cfc;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.6s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .credentials-hint {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+        }
+
+        .credentials-hint strong {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <div class="logo">🔐</div>
+            <h1>Sistema DFS</h1>
+            <p>Gestión de Productos y Clientes</p>
+        </div>
+
+        <div id="alert" class="alert"></div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="login">Usuario</label>
+                <input type="text" id="login" name="login" required 
+                       placeholder="Ingrese su usuario" autocomplete="username">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" required 
+                       placeholder="Ingrese su contraseña" autocomplete="current-password">
+            </div>
+
+            <button type="submit" class="btn-login" id="btnLogin">
+                Iniciar Sesión
+            </button>
+        </form>
+
+        <div class="credentials-hint">
+            💡 <strong>Credenciales por defecto:</strong><br>
+            Usuario: admin | Contraseña: admin
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://backend.tpdteam3.com/backend/api';
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const login = document.getElementById('login').value.trim();
+            const password = document.getElementById('password').value;
+            const btnLogin = document.getElementById('btnLogin');
+            const alert = document.getElementById('alert');
+
+            // Validación básica
+            if (!login || !password) {
+                showAlert('Por favor complete todos los campos', 'error');
+                return;
+            }
+
+            // Deshabilitar botón y mostrar loading
+            btnLogin.disabled = true;
+            btnLogin.innerHTML = '<span class="loading"></span>Iniciando sesión...';
+            hideAlert();
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ login, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.resultado === 'Ok') {
+                    // Guardar token
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('username', login);
+                    
+                    showAlert('¡Login exitoso! Redirigiendo...', 'success');
+                    
+                    // Redireccionar después de 1 segundo
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1000);
+                } else {
+                    showAlert(data.mensaje || 'Credenciales incorrectas', 'error');
+                    btnLogin.disabled = false;
+                    btnLogin.innerHTML = 'Iniciar Sesión';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Error de conexión. Verifica que el servidor esté corriendo.', 'error');
+                btnLogin.disabled = false;
+                btnLogin.innerHTML = 'Iniciar Sesión';
+            }
+        });
+
+        function showAlert(message, type) {
+            const alert = document.getElementById('alert');
+            alert.textContent = message;
+            alert.className = `alert alert-${type}`;
+            alert.style.display = 'block';
+        }
+
+        function hideAlert() {
+            const alert = document.getElementById('alert');
+            alert.style.display = 'none';
+        }
+
+        // Verificar si ya está logueado
+        if (localStorage.getItem('token')) {
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+</body>
+</html>

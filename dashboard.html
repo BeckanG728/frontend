@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sistema DFS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .nav-item {
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .navbar-user {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 600;
+        }
+
+        .user-role {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .btn-logout {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .dashboard-header {
+            margin-bottom: 40px;
+        }
+
+        .dashboard-header h1 {
+            color: #2d3748;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .dashboard-header p {
+            color: #718096;
+            font-size: 16px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .stat-icon.products {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .stat-icon.clients {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .stat-icon.storage {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .stat-icon.system {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .stat-label {
+            color: #718096;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            color: #2d3748;
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .stat-change {
+            font-size: 13px;
+            color: #48bb78;
+        }
+
+        .stat-change.negative {
+            color: #f56565;
+        }
+
+        .quick-actions {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            margin-bottom: 40px;
+        }
+
+        .quick-actions h2 {
+            color: #2d3748;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .action-btn {
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .system-info {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+        }
+
+        .system-info h2 {
+            color: #2d3748;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .info-item {
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-label {
+            color: #718096;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            color: #2d3748;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-badge.online {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .status-badge.offline {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-menu {
+                gap: 5px;
+            }
+
+            .nav-item {
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+
+            .navbar-user {
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 8px;
+            }
+
+            .user-info {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                <span>🗄️</span>
+                <span>Sistema DFS</span>
+            </div>
+            <div class="navbar-menu">
+                <a href="dashboard.html" class="nav-item active">Dashboard</a>
+                <a href="producto.html" class="nav-item">Productos</a>
+                <a href="cliente.html" class="nav-item">Clientes</a>
+            </div>
+            <div class="navbar-user">
+                <div class="user-info">
+                    <div class="user-name" id="userName">Admin</div>
+                    <div class="user-role">Administrador</div>
+                </div>
+                <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>Bienvenido al Dashboard</h1>
+            <p>Resumen general del sistema distribuido de archivos</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon products">📦</div>
+                <div class="stat-label">Total Productos</div>
+                <div class="stat-value" id="totalProductos">0</div>
+                <div class="stat-change">↑ Cargando...</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon clients">👥</div>
+                <div class="stat-label">Total Clientes</div>
+                <div class="stat-value" id="totalClientes">0</div>
+                <div class="stat-change">↑ Cargando...</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon storage">💾</div>
+                <div class="stat-label">Productos con Imagen</div>
+                <div class="stat-value" id="productosConImagen">0</div>
+                <div class="stat-change">Almacenamiento distribuido</div>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+            <h2>Acciones Rápidas</h2>
+            <div class="actions-grid">
+                <a href="productos.html" class="action-btn">
+                    <span>📦</span>
+                    <span>Gestionar Productos</span>
+                </a>
+                <a href="clientes.html" class="action-btn">
+                    <span>👥</span>
+                    <span>Gestionar Clientes</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://backend.tpdteam3.com/backend/api';
+
+        // Verificar autenticación
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'index.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            window.location.href = 'index.html';
+        }
+
+        // Cargar estadísticas
+        async function loadStats() {
+            if (!checkAuth()) return;
+
+            const token = localStorage.getItem('token');
+            const username = localStorage.getItem('username');
+            
+            document.getElementById('userName').textContent = username || 'Admin';
+
+            try {
+                // Cargar productos
+                const productosRes = await fetch(`${API_URL}/productos`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (productosRes.ok) {
+                    const productos = await productosRes.json();
+                    document.getElementById('totalProductos').textContent = productos.length;
+                    
+                    // Contar productos con imagen
+                    const conImagen = productos.filter(p => p.imagenId).length;
+                    document.getElementById('productosConImagen').textContent = conImagen;
+                }
+
+                // Cargar clientes
+                const clientesRes = await fetch(`${API_URL}/clientes`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (clientesRes.ok) {
+                    const clientes = await clientesRes.json();
+                    document.getElementById('totalClientes').textContent = clientes.length;
+                }
+
+            } catch (error) {
+                console.error('Error cargando estadísticas:', error);
+            }
+        }
+
+        // Inicializar
+        if (checkAuth()) {
+            loadStats();
+        }
+    </script>
+</body>
+</html>
