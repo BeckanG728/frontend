@@ -102,7 +102,7 @@
 
         .btn-primary {
             padding: 12px 24px;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #1188bf 0%, #000bd3 100%);
             color: white;
             border: none;
             border-radius: 8px;
@@ -150,7 +150,7 @@
         }
 
         thead {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #14db74 0%, #007ff5 100%);
             color: white;
         }
 
@@ -179,7 +179,7 @@
 
         .cliente-id {
             font-weight: 700;
-            color: #f5576c;
+            color: #c8001b;
         }
 
         .cliente-nombre {
@@ -444,7 +444,7 @@
         let clientes = [];
 
         function checkAuth() {
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             if (!token) {
                 window.location.href = 'index.html';
                 return false;
@@ -453,12 +453,12 @@
         }
 
         function logout() {
-            localStorage.removeItem('token');
+            sessionStorage.removeItem('token');
             window.location.href = 'index.html';
         }
 
         async function loadClientes() {
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             try {
                 const response = await fetch(`${API_URL}/clientes`, {
                     headers: { 'Authorization': `Bearer ${token}` }
@@ -543,7 +543,7 @@
         async function deleteCliente(id) {
             if (!confirm('¿Estás seguro de eliminar este cliente?')) return;
 
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             try {
                 const response = await fetch(`${API_URL}/clientes/${id}`, {
                     method: 'DELETE',
@@ -562,7 +562,7 @@
 
         document.getElementById('clienteForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             const id = document.getElementById('clienteId').value;
             
             const data = {

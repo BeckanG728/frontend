@@ -378,11 +378,11 @@
         <div class="quick-actions">
             <h2>Acciones Rápidas</h2>
             <div class="actions-grid">
-                <a href="productos.html" class="action-btn">
+                <a href="producto.html" class="action-btn">
                     <span>📦</span>
                     <span>Gestionar Productos</span>
                 </a>
-                <a href="clientes.html" class="action-btn">
+                <a href="cliente.html" class="action-btn">
                     <span>👥</span>
                     <span>Gestionar Clientes</span>
                 </a>
@@ -395,7 +395,7 @@
 
         // Verificar autenticación
         function checkAuth() {
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             if (!token) {
                 window.location.href = 'index.html';
                 return false;
@@ -405,8 +405,8 @@
 
         // Logout
         function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('username');
+            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('username');
             window.location.href = 'index.html';
         }
 
@@ -414,8 +414,8 @@
         async function loadStats() {
             if (!checkAuth()) return;
 
-            const token = localStorage.getItem('token');
-            const username = localStorage.getItem('username');
+            const token = sessionStorage.getItem('token');
+            const username = sessionStorage.getItem('username');
             
             document.getElementById('userName').textContent = username || 'Admin';
 
@@ -447,9 +447,21 @@
             }
         }
 
+        // Prevenir que el usuario regrese a páginas autenticadas después del logout
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+                // Si la página se carga desde cache y no hay token, redirigir al login
+                if (!sessionStorage.getItem('token')) {
+                    window.location.href = 'index.html';
+                }
+            }
+        });
+
         // Inicializar
         if (checkAuth()) {
             loadStats();
+        } else {
+            window.location.href = 'index.html';
         }
     </script>
 </body>

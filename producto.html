@@ -357,6 +357,12 @@
             color: #742a2a;
         }
 
+        .alert-warning {
+            background: #feebc8;
+            color: #744210;
+            border: 1px solid #fbd38d;
+        }
+
         .loading {
             text-align: center;
             padding: 40px;
@@ -432,6 +438,7 @@
             </div>
             <form id="productForm">
                 <input type="hidden" id="productId">
+                <input type="hidden" id="productVersion">
                 <div class="form-group">
                     <label>Nombre del Producto *</label>
                     <input type="text" id="productName" required>
@@ -476,10 +483,10 @@
         const API_URL = 'https://backend.tpdteam3.com/backend/api';
         let productos = [];
         let currentProductId = null;
-        const imageCache = new Map(); // ✅ Caché de imágenes
+        const imageCache = new Map();
 
         function checkAuth() {
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             if (!token) {
                 window.location.href = 'index.html';
                 return false;
@@ -487,20 +494,18 @@
             return true;
         }
 
-        // ✅ Función para cargar imagen con autenticación
         async function loadProductImage(productId) {
             if (imageCache.has(productId)) {
                 return imageCache.get(productId);
             }
 
             try {
-                const token = localStorage.getItem('token');
+                const token = sessionStorage.getItem('token');
                 const response = await fetch(`${API_URL}/imagenes/download/${productId}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
                 if (!response.ok) {
-                    console.warn(`No se pudo cargar imagen para producto ${productId}`);
                     return null;
                 }
 
@@ -510,18 +515,18 @@
                 
                 return imageUrl;
             } catch (error) {
-                console.error('Error cargando imagen:', error);
                 return null;
             }
         }
 
         function logout() {
-            localStorage.removeItem('token');
+            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('username');
             window.location.href = 'index.html';
         }
 
         async function loadProductos() {
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             try {
                 const response = await fetch(`${API_URL}/productos`, {
                     headers: { 'Authorization': `Bearer ${token}` }
@@ -533,7 +538,6 @@
                     showAlert('Error al cargar productos', 'error');
                 }
             } catch (error) {
-                console.error('Error:', error);
                 showAlert('Error de conexión', 'error');
             }
         }
@@ -571,7 +575,7 @@
                 </div>
             `).join('');
 
-            // ✅ Cargar imágenes después (con autenticación)
+            // Cargar imágenes después
             for (const p of products) {
                 if (p.imagenId) {
                     const imageUrl = await loadProductImage(p.codiProd);
@@ -580,8 +584,6 @@
                     if (imageUrl && imgContainer) {
                         imgContainer.className = 'product-image';
                         imgContainer.innerHTML = `<img src="${imageUrl}" alt="${p.nombProd}" style="width: 100%; height: 100%; object-fit: cover;">`;
-                    } else {
-                        imgContainer.innerHTML = '❌';
                     }
                 }
             }
@@ -603,12 +605,14 @@
                 const product = productos.find(p => p.codiProd === id);
                 document.getElementById('modalTitle').textContent = 'Editar Producto';
                 document.getElementById('productId').value = product.codiProd;
+                document.getElementById('productVersion').value = product.version;
                 document.getElementById('productName').value = product.nombProd;
                 document.getElementById('productPrice').value = product.precProd;
                 document.getElementById('productStock').value = product.stocProd;
             } else {
                 document.getElementById('modalTitle').textContent = 'Nuevo Producto';
                 document.getElementById('productId').value = '';
+                document.getElementById('productVersion').value = '';
             }
         }
 
@@ -634,7 +638,7 @@
         async function deleteProduct(id) {
             if (!confirm('¿Estás seguro de eliminar este producto?')) return;
 
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             try {
                 const response = await fetch(`${API_URL}/productos/${id}`, {
                     method: 'DELETE',
@@ -653,19 +657,57 @@
 
         document.getElementById('productForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             const id = document.getElementById('productId').value;
+            const currentVersion = document.getElementById('productVersion').value;
             
-            const data = {
-                nombProd: document.getElementById('productName').value,
-                precProd: parseFloat(document.getElementById('productPrice').value),
-                stocProd: parseFloat(document.getElementById('productStock').value)
-            };
-
             try {
-                const url = id ? `${API_URL}/productos/${id}` : `${API_URL}/productos`;
-                const method = id ? 'PUT' : 'POST';
-                
+                let data;
+                let url;
+                let method;
+
+                if (id) {
+                    // PARA ACTUALIZACIÓN: Obtener el producto completo primero
+                    const getResponse = await fetch(`${API_URL}/productos/${id}`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+
+                    if (!getResponse.ok) {
+                        showAlert(`Error: No se pudo obtener el producto para actualizar`, 'error');
+                        return;
+                    }
+
+                    const productoCompleto = await getResponse.json();
+
+                    // Verificar si la versión ha cambiado (conflicto de concurrencia)
+                    if (productoCompleto.version != currentVersion) {
+                        closeModal();
+                        showAlert('El producto fue modificado por otro usuario. Por favor, actualiza la página para ver los cambios más recientes.', 'warning');
+                        return;
+                    }
+
+                    // Actualizar solo los campos editables, mantener los demás
+                    data = {
+                        ...productoCompleto, // Mantener todos los campos existentes
+                        nombProd: document.getElementById('productName').value,
+                        precProd: parseFloat(document.getElementById('productPrice').value),
+                        stocProd: parseInt(document.getElementById('productStock').value)
+                    };
+
+                    url = `${API_URL}/productos/${id}`;
+                    method = 'PUT';
+                    
+                } else {
+                    // PARA CREACIÓN: Solo enviar campos básicos
+                    data = {
+                        nombProd: document.getElementById('productName').value,
+                        precProd: parseFloat(document.getElementById('productPrice').value),
+                        stocProd: parseInt(document.getElementById('productStock').value)
+                    };
+                    url = `${API_URL}/productos`;
+                    method = 'POST';
+                }
+
                 const response = await fetch(url, {
                     method: method,
                     headers: {
@@ -680,16 +722,24 @@
                     closeModal();
                     loadProductos();
                 } else {
-                    showAlert('Error al guardar producto', 'error');
+                    const errorData = await response.json().catch(() => ({message: 'Error desconocido'}));
+                    
+                    // Manejar específicamente el error de conflicto de versión
+                    if (errorData.status === 'conflict') {
+                        closeModal();
+                        showAlert('El producto fue modificado por otro usuario. Por favor, actualiza la página para ver los cambios más recientes.', 'warning');
+                    } else {
+                        showAlert(`Error al guardar producto: ${errorData.message || 'Error desconocido'}`, 'error');
+                    }
                 }
             } catch (error) {
-                showAlert('Error de conexión', 'error');
+                showAlert('Error de conexión: ' + error.message, 'error');
             }
         });
 
         document.getElementById('imageForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             const file = document.getElementById('imageFile').files[0];
 
             const formData = new FormData();
@@ -720,11 +770,23 @@
             alert.className = `alert alert-${type}`;
             alert.textContent = message;
             document.getElementById('alertContainer').appendChild(alert);
-            setTimeout(() => alert.remove(), 3000);
+            setTimeout(() => alert.remove(), 5000);
         }
 
+        // Prevenir que el usuario regrese a páginas autenticadas después del logout
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+                if (!sessionStorage.getItem('token')) {
+                    window.location.href = 'index.html';
+                }
+            }
+        });
+
+        // Inicializar
         if (checkAuth()) {
             loadProductos();
+        } else {
+            window.location.href = 'index.html';
         }
     </script>
 </body>

@@ -208,15 +208,16 @@
                 Iniciar Sesión
             </button>
         </form>
-
-        <div class="credentials-hint">
-            💡 <strong>Credenciales por defecto:</strong><br>
-            Usuario: admin | Contraseña: admin
-        </div>
     </div>
 
     <script>
         const API_URL = 'https://backend.tpdteam3.com/backend/api';
+
+        // Limpiar formulario al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('loginForm').reset();
+            hideAlert();
+        });
 
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -249,11 +250,14 @@
                 const data = await response.json();
 
                 if (response.ok && data.resultado === 'Ok') {
-                    // Guardar token
-                    localStorage.setItem('token', data.token);
-                    localStorage.setItem('username', login);
+                    // Guardar token en sessionStorage
+                    sessionStorage.setItem('token', data.token);
+                    sessionStorage.setItem('username', login);
                     
                     showAlert('¡Login exitoso! Redirigiendo...', 'success');
+                    
+                    // LIMPIAR CAMPOS DEL FORMULARIO
+                    document.getElementById('loginForm').reset();
                     
                     // Redireccionar después de 1 segundo
                     setTimeout(() => {
@@ -272,6 +276,23 @@
             }
         });
 
+        // Agregar esta función para prevenir el cache del navegador
+        window.addEventListener('pageshow', function(event) {
+            // Si la página se carga desde cache, limpiar el formulario
+            if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+                document.getElementById('loginForm').reset();
+                hideAlert();
+            }
+        });
+
+        // Verificar si ya está logueado (usando sessionStorage)
+        if (sessionStorage.getItem('token')) {
+            window.location.href = 'dashboard.html';
+        } else {
+            // Asegurarse de que el formulario esté limpio
+            document.getElementById('loginForm').reset();
+        }
+
         function showAlert(message, type) {
             const alert = document.getElementById('alert');
             alert.textContent = message;
@@ -282,11 +303,6 @@
         function hideAlert() {
             const alert = document.getElementById('alert');
             alert.style.display = 'none';
-        }
-
-        // Verificar si ya está logueado
-        if (localStorage.getItem('token')) {
-            window.location.href = 'dashboard.html';
         }
     </script>
 </body>
