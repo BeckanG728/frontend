@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -22,13 +22,14 @@
         }
 
         .login-container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 40px;
+            background: #FFFFFF;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            padding: 48px;
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
             animation: slideIn 0.5s ease-out;
+            border: 1px solid rgba(148, 163, 184, 0.1);
         }
 
         @keyframes slideIn {
@@ -44,76 +45,82 @@
 
         .login-header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 36px;
         }
 
         .login-header h1 {
-            color: #333;
-            font-size: 28px;
-            margin-bottom: 10px;
+            color: #0f172a;
+            font-size: 32px;
+            margin-bottom: 8px;
+            font-weight: 700;
         }
 
         .login-header p {
-            color: #666;
-            font-size: 14px;
+            color: #64748b;
+            font-size: 15px;
         }
 
         .logo {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            margin: 0 auto 20px;
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+            border-radius: 16px;
+            margin: 0 auto 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 40px;
+            font-size: 36px;
             color: white;
+            box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.3);
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .form-group label {
             display: block;
-            color: #333;
+            color: #1e293b;
             font-size: 14px;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         .form-group input {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 14px;
+            padding: 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 15px;
             transition: all 0.3s ease;
+            color: #0f172a;
+            background: #f8fafc;
         }
 
         .form-group input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #0ea5e9;
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
         }
 
         .btn-login {
             width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 16px;
+            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
         }
 
         .btn-login:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.4);
         }
 
         .btn-login:active {
@@ -123,15 +130,17 @@
         .btn-login:disabled {
             opacity: 0.6;
             cursor: not-allowed;
+            transform: none;
         }
 
         .alert {
-            padding: 12px 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            padding: 14px 16px;
+            border-radius: 12px;
+            margin-bottom: 24px;
             font-size: 14px;
             display: none;
             animation: fadeIn 0.3s ease;
+            font-weight: 500;
         }
 
         @keyframes fadeIn {
@@ -140,15 +149,15 @@
         }
 
         .alert-error {
-            background: #fee;
-            color: #c33;
-            border: 1px solid #fcc;
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
         }
 
         .alert-success {
-            background: #efe;
-            color: #3c3;
-            border: 1px solid #cfc;
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
         }
 
         .loading {
@@ -164,20 +173,6 @@
 
         @keyframes spin {
             to { transform: rotate(360deg); }
-        }
-
-        .credentials-hint {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f5f5f5;
-            border-radius: 10px;
-            font-size: 12px;
-            color: #666;
-            text-align: center;
-        }
-
-        .credentials-hint strong {
-            color: #333;
         }
     </style>
 </head>
@@ -213,7 +208,6 @@
     <script>
         const API_URL = 'https://backend.tpdteam3.com/backend/api';
 
-        // Limpiar formulario al cargar la página
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('loginForm').reset();
             hideAlert();
@@ -225,15 +219,12 @@
             const login = document.getElementById('login').value.trim();
             const password = document.getElementById('password').value;
             const btnLogin = document.getElementById('btnLogin');
-            const alert = document.getElementById('alert');
 
-            // Validación básica
             if (!login || !password) {
                 showAlert('Por favor complete todos los campos', 'error');
                 return;
             }
 
-            // Deshabilitar botón y mostrar loading
             btnLogin.disabled = true;
             btnLogin.innerHTML = '<span class="loading"></span>Iniciando sesión...';
             hideAlert();
@@ -250,16 +241,13 @@
                 const data = await response.json();
 
                 if (response.ok && data.resultado === 'Ok') {
-                    // Guardar token en sessionStorage
                     sessionStorage.setItem('token', data.token);
                     sessionStorage.setItem('username', login);
                     
                     showAlert('¡Login exitoso! Redirigiendo...', 'success');
                     
-                    // LIMPIAR CAMPOS DEL FORMULARIO
                     document.getElementById('loginForm').reset();
                     
-                    // Redireccionar después de 1 segundo
                     setTimeout(() => {
                         window.location.href = 'dashboard.html';
                     }, 1000);
@@ -276,20 +264,16 @@
             }
         });
 
-        // Agregar esta función para prevenir el cache del navegador
         window.addEventListener('pageshow', function(event) {
-            // Si la página se carga desde cache, limpiar el formulario
             if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
                 document.getElementById('loginForm').reset();
                 hideAlert();
             }
         });
 
-        // Verificar si ya está logueado (usando sessionStorage)
         if (sessionStorage.getItem('token')) {
             window.location.href = 'dashboard.html';
         } else {
-            // Asegurarse de que el formulario esté limpio
             document.getElementById('loginForm').reset();
         }
 

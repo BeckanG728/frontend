@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clientes - Sistema DFS</title>
+    <title>Clientes - Team3System</title>
     <style>
         * {
             margin: 0;
@@ -13,14 +13,14 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f7fa;
+            background: #f1f5f9;
         }
 
         .navbar {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
             color: white;
-            padding: 0 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 0 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -32,7 +32,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 70px;
+            height: 72px;
         }
 
         .navbar-brand {
@@ -45,102 +45,115 @@
 
         .navbar-menu {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
         }
 
         .nav-item {
             padding: 10px 20px;
-            border-radius: 8px;
+            border-radius: 10px;
             text-decoration: none;
-            color: white;
+            color: #cbd5e1;
             font-weight: 500;
             transition: all 0.3s ease;
         }
 
         .nav-item:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
         }
 
         .nav-item.active {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(14, 165, 233, 0.15);
+            color: #38bdf8;
         }
 
         .btn-logout {
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid white;
-            color: white;
-            border-radius: 8px;
+            padding: 10px 20px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s ease;
         }
 
         .btn-logout:hover {
-            background: white;
-            color: #667eea;
+            background: #ef4444;
+            border-color: #ef4444;
+            color: white;
         }
 
         .container {
             max-width: 1400px;
             margin: 40px auto;
-            padding: 0 20px;
+            padding: 0 24px;
         }
 
         .page-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 32px;
         }
 
         .page-header h1 {
-            color: #2d3748;
-            font-size: 32px;
+            color: #0f172a;
+            font-size: 36px;
+            font-weight: 700;
         }
 
         .btn-primary {
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #1188bf 0%, #000bd3 100%);
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+            font-size: 15px;
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(240, 147, 251, 0.3);
+            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.4);
         }
 
         .search-bar {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            margin-bottom: 20px;
+            background: #FFFFFF;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            margin-bottom: 24px;
         }
 
         .search-bar input {
             width: 100%;
-            padding: 12px 20px;
+            padding: 14px 20px;
             border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 16px;
+            border-radius: 12px;
+            font-size: 15px;
+            color: #0f172a;
+            background: #f8fafc;
+            transition: all 0.3s ease;
         }
 
         .search-bar input:focus {
             outline: none;
-            border-color: #f093fb;
+            border-color: #0ea5e9;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
         }
 
         .table-container {
-            background: white;
+            background: #FFFFFF;
             border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
             overflow: hidden;
         }
 
@@ -150,15 +163,15 @@
         }
 
         thead {
-            background: linear-gradient(135deg, #14db74 0%, #007ff5 100%);
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
             color: white;
         }
 
         thead th {
-            padding: 20px;
+            padding: 20px 24px;
             text-align: left;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -169,17 +182,17 @@
         }
 
         tbody tr:hover {
-            background: #f7fafc;
+            background: #f8fafc;
         }
 
         tbody td {
-            padding: 20px;
-            color: #2d3748;
+            padding: 20px 24px;
+            color: #0f172a;
         }
 
         .cliente-id {
             font-weight: 700;
-            color: #c8001b;
+            color: #0ea5e9;
         }
 
         .cliente-nombre {
@@ -192,30 +205,36 @@
         }
 
         .btn-edit, .btn-delete {
-            padding: 8px 16px;
+            padding: 10px 18px;
             border: none;
-            border-radius: 6px;
+            border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-size: 14px;
         }
 
         .btn-edit {
-            background: #4299e1;
+            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
             color: white;
+            box-shadow: 0 2px 8px rgba(14, 165, 233, 0.25);
         }
 
         .btn-edit:hover {
-            background: #3182ce;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.35);
         }
 
         .btn-delete {
-            background: #f56565;
+            background: #ef4444;
             color: white;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25);
         }
 
         .btn-delete:hover {
-            background: #e53e3e;
+            background: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
         }
 
         .modal {
@@ -229,6 +248,7 @@
             z-index: 2000;
             align-items: center;
             justify-content: center;
+            backdrop-filter: blur(4px);
         }
 
         .modal.active {
@@ -236,115 +256,151 @@
         }
 
         .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 16px;
-            max-width: 500px;
+            background: #FFFFFF;
+            padding: 32px;
+            border-radius: 20px;
+            max-width: 520px;
             width: 90%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
 
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .modal-header h2 {
-            color: #2d3748;
+            color: #0f172a;
+            font-size: 24px;
+            font-weight: 700;
         }
 
         .btn-close {
-            background: none;
+            background: #f1f5f9;
             border: none;
-            font-size: 28px;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            font-size: 24px;
             cursor: pointer;
-            color: #718096;
+            color: #64748b;
+            transition: all 0.3s ease;
+        }
+
+        .btn-close:hover {
+            background: #e2e8f0;
+            color: #0f172a;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .form-group label {
             display: block;
-            color: #2d3748;
+            color: #1e293b;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            font-size: 14px;
         }
 
         .form-group input {
             width: 100%;
-            padding: 12px;
+            padding: 14px 16px;
             border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 14px;
+            border-radius: 12px;
+            font-size: 15px;
+            color: #0f172a;
+            background: #f8fafc;
+            transition: all 0.3s ease;
         }
 
         .form-group input:focus {
             outline: none;
-            border-color: #f093fb;
+            border-color: #0ea5e9;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
         }
 
         .form-actions {
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
 
         .btn-cancel {
             flex: 1;
-            padding: 12px;
-            background: #e2e8f0;
-            color: #2d3748;
+            padding: 14px;
+            background: #f1f5f9;
+            color: #475569;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel:hover {
+            background: #e2e8f0;
+            color: #1e293b;
         }
 
         .btn-save {
             flex: 1;
-            padding: 12px;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 14px;
+            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(14, 165, 233, 0.4);
         }
 
         .alert {
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
             font-weight: 500;
+            font-size: 14px;
         }
 
         .alert-success {
-            background: #c6f6d5;
-            color: #22543d;
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
         }
 
         .alert-error {
-            background: #fed7d7;
-            color: #742a2a;
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
         }
 
         .loading {
             text-align: center;
             padding: 40px;
-            color: #718096;
+            color: #64748b;
         }
 
         .no-clientes {
             text-align: center;
             padding: 60px 20px;
-            color: #718096;
+            color: #64748b;
         }
 
         .no-clientes h3 {
             font-size: 24px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            color: #1e293b;
+            font-weight: 700;
         }
 
         @media (max-width: 768px) {
@@ -358,7 +414,7 @@
 
             .page-header {
                 flex-direction: column;
-                gap: 15px;
+                gap: 16px;
                 align-items: flex-start;
             }
 
@@ -373,7 +429,7 @@
         <div class="navbar-container">
             <div class="navbar-brand">
                 <span>🗄️</span>
-                <span>Sistema DFS</span>
+                <span>Team3System</span>
             </div>
             <div class="navbar-menu">
                 <a href="dashboard.html" class="nav-item">Dashboard</a>
@@ -417,7 +473,6 @@
         </div>
     </div>
 
-    <!-- Modal Formulario -->
     <div id="clienteModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -440,7 +495,7 @@
     </div>
 
     <script>
-        const API_URL = 'http://localhost:8080/backend/api';
+        const API_URL = 'https://backend.tpdteam3.com/backend/api';
         let clientes = [];
 
         function checkAuth() {
