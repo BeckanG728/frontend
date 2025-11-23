@@ -13,14 +13,14 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f1f5f9;
+            background: #f0f4f8;
         }
 
         .navbar {
             background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
             color: white;
-            padding: 0 24px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 0 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -32,30 +32,35 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 72px;
+            height: 64px;
+            gap: 16px;
         }
 
         .navbar-brand {
             display: flex;
             align-items: center;
             gap: 12px;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 700;
+            flex-shrink: 0;
         }
 
         .navbar-menu {
             display: flex;
             gap: 8px;
             align-items: center;
+            flex: 1;
         }
 
         .nav-item {
-            padding: 10px 20px;
-            border-radius: 10px;
+            padding: 8px 16px;
+            border-radius: 8px;
             text-decoration: none;
             color: #cbd5e1;
             font-weight: 500;
+            font-size: 14px;
             transition: all 0.3s ease;
+            white-space: nowrap;
         }
 
         .nav-item:hover {
@@ -64,79 +69,83 @@
         }
 
         .nav-item.active {
-            background: rgba(14, 165, 233, 0.15);
-            color: #38bdf8;
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
         }
 
         .btn-logout {
-            padding: 10px 20px;
+            padding: 8px 16px;
             background: rgba(239, 68, 68, 0.1);
             border: 2px solid rgba(239, 68, 68, 0.3);
             color: #f87171;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
+            font-size: 13px;
             transition: all 0.3s ease;
+            margin-left: auto;
         }
 
         .btn-logout:hover {
-            background: #ef4444;
-            border-color: #ef4444;
+            background: #dc2626;
+            border-color: #dc2626;
             color: white;
         }
 
         .container {
             max-width: 1400px;
-            margin: 40px auto;
-            padding: 0 24px;
+            margin: 32px auto;
+            padding: 0 16px;
         }
 
         .page-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 32px;
+            margin-bottom: 28px;
+            gap: 16px;
+            flex-wrap: wrap;
         }
 
         .page-header h1 {
             color: #0f172a;
-            font-size: 36px;
+            font-size: 32px;
             font-weight: 700;
         }
 
         .btn-primary {
-            padding: 14px 28px;
-            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
-            font-size: 15px;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+            font-size: 14px;
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.4);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
         .search-bar {
             background: #FFFFFF;
-            padding: 24px;
-            border-radius: 16px;
+            padding: 20px;
+            border-radius: 10px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
             border: 1px solid #e2e8f0;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .search-bar input {
             width: 100%;
-            padding: 14px 20px;
+            padding: 12px 14px;
             border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 15px;
+            border-radius: 8px;
+            font-size: 14px;
             color: #0f172a;
             background: #f8fafc;
             transition: all 0.3s ease;
@@ -144,14 +153,14 @@
 
         .search-bar input:focus {
             outline: none;
-            border-color: #0ea5e9;
+            border-color: #3b82f6;
             background: white;
-            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .table-container {
             background: #FFFFFF;
-            border-radius: 16px;
+            border-radius: 10px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
             border: 1px solid #e2e8f0;
             overflow: hidden;
@@ -168,10 +177,10 @@
         }
 
         thead th {
-            padding: 20px 24px;
+            padding: 16px;
             text-align: left;
             font-weight: 600;
-            font-size: 13px;
+            font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -186,13 +195,14 @@
         }
 
         tbody td {
-            padding: 20px 24px;
+            padding: 16px;
             color: #0f172a;
+            font-size: 14px;
         }
 
         .cliente-id {
             font-weight: 700;
-            color: #0ea5e9;
+            color: #3b82f6;
         }
 
         .cliente-nombre {
@@ -201,40 +211,41 @@
 
         .action-buttons {
             display: flex;
-            gap: 10px;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .btn-edit, .btn-delete {
-            padding: 10px 18px;
+            padding: 8px 14px;
             border: none;
-            border-radius: 10px;
+            border-radius: 6px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 14px;
+            font-size: 12px;
         }
 
         .btn-edit {
-            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             color: white;
-            box-shadow: 0 2px 8px rgba(14, 165, 233, 0.25);
+            box-shadow: 0 1px 4px rgba(59, 130, 246, 0.2);
         }
 
         .btn-edit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.35);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
         }
 
         .btn-delete {
-            background: #ef4444;
+            background: #dc2626;
             color: white;
-            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25);
+            box-shadow: 0 1px 4px rgba(220, 38, 38, 0.2);
         }
 
         .btn-delete:hover {
-            background: #dc2626;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+            background: #b91c1c;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(220, 38, 38, 0.3);
         }
 
         .modal {
@@ -244,11 +255,12 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 2000;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(4px);
+            padding: 16px;
+            backdrop-filter: blur(2px);
         }
 
         .modal.active {
@@ -257,36 +269,39 @@
 
         .modal-content {
             background: #FFFFFF;
-            padding: 32px;
-            border-radius: 20px;
-            max-width: 520px;
-            width: 90%;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 28px;
+            border-radius: 12px;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.25);
         }
 
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .modal-header h2 {
             color: #0f172a;
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
         }
 
         .btn-close {
             background: #f1f5f9;
             border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            font-size: 24px;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            font-size: 22px;
             cursor: pointer;
             color: #64748b;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .btn-close:hover {
@@ -295,23 +310,23 @@
         }
 
         .form-group {
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .form-group label {
             display: block;
             color: #1e293b;
             font-weight: 600;
-            margin-bottom: 10px;
-            font-size: 14px;
+            margin-bottom: 8px;
+            font-size: 13px;
         }
 
         .form-group input {
             width: 100%;
-            padding: 14px 16px;
+            padding: 12px 14px;
             border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 15px;
+            border-radius: 8px;
+            font-size: 14px;
             color: #0f172a;
             background: #f8fafc;
             transition: all 0.3s ease;
@@ -319,25 +334,26 @@
 
         .form-group input:focus {
             outline: none;
-            border-color: #0ea5e9;
+            border-color: #3b82f6;
             background: white;
-            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .form-actions {
             display: flex;
-            gap: 12px;
+            gap: 10px;
         }
 
         .btn-cancel {
             flex: 1;
-            padding: 14px;
+            padding: 12px;
             background: #f1f5f9;
             color: #475569;
             border: none;
-            border-radius: 12px;
+            border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
+            font-size: 14px;
             transition: all 0.3s ease;
         }
 
@@ -348,78 +364,152 @@
 
         .btn-save {
             flex: 1;
-            padding: 14px;
-            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+            padding: 12px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
             transition: all 0.3s ease;
+            font-size: 14px;
         }
 
         .btn-save:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(14, 165, 233, 0.4);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
         .alert {
-            padding: 16px 20px;
-            border-radius: 12px;
-            margin-bottom: 24px;
+            padding: 12px 14px;
+            border-radius: 8px;
+            margin-bottom: 20px;
             font-weight: 500;
-            font-size: 14px;
+            font-size: 13px;
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
         }
 
         .alert-success {
             background: #d1fae5;
             color: #065f46;
-            border: 1px solid #a7f3d0;
+            border-left: 4px solid #10b981;
         }
 
         .alert-error {
             background: #fee2e2;
             color: #991b1b;
-            border: 1px solid #fecaca;
+            border-left: 4px solid #dc2626;
         }
 
         .loading {
             text-align: center;
-            padding: 40px;
+            padding: 32px;
             color: #64748b;
         }
 
         .no-clientes {
             text-align: center;
-            padding: 60px 20px;
+            padding: 48px 20px;
             color: #64748b;
         }
 
         .no-clientes h3 {
-            font-size: 24px;
-            margin-bottom: 12px;
+            font-size: 20px;
+            margin-bottom: 8px;
             color: #1e293b;
             font-weight: 700;
         }
 
         @media (max-width: 768px) {
+            .navbar-container {
+                height: auto;
+                padding: 12px 0;
+                flex-wrap: wrap;
+            }
+
+            .navbar-brand {
+                font-size: 16px;
+            }
+
+            .navbar-menu {
+                width: 100%;
+                order: 3;
+                margin-top: 12px;
+            }
+
+            .nav-item {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .btn-logout {
+                margin-left: 0;
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
             .table-container {
                 overflow-x: auto;
             }
 
             table {
-                min-width: 600px;
-            }
-
-            .page-header {
-                flex-direction: column;
-                gap: 16px;
-                align-items: flex-start;
+                min-width: 500px;
             }
 
             .action-buttons {
                 flex-direction: column;
+            }
+
+            .btn-edit, .btn-delete {
+                width: 100%;
+            }
+
+            .page-header h1 {
+                font-size: 24px;
+            }
+
+            .container {
+                padding: 0 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-brand span:first-child {
+                display: none;
+            }
+
+            .page-header h1 {
+                font-size: 20px;
+            }
+
+            .btn-primary {
+                width: 100%;
+            }
+
+            thead th {
+                padding: 12px 8px;
+                font-size: 11px;
+            }
+
+            tbody td {
+                padding: 12px 8px;
+                font-size: 12px;
+            }
+
+            .modal-content {
+                padding: 20px;
+            }
+
+            .modal-header h2 {
+                font-size: 18px;
             }
         }
     </style>
@@ -436,15 +526,13 @@
                 <a href="producto.html" class="nav-item">Productos</a>
                 <a href="cliente.html" class="nav-item active">Clientes</a>
             </div>
-            <div>
-                <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
-            </div>
+            <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
         </div>
     </nav>
 
     <div class="container">
         <div class="page-header">
-            <h1>👥 Gestión de Clientes</h1>
+            <h1>👥 Clientes</h1>
             <button class="btn-primary" onclick="openModal()">+ Nuevo Cliente</button>
         </div>
 
@@ -512,6 +600,21 @@
             window.location.href = 'index.html';
         }
 
+        function parseErrorMessage(error) {
+            if (typeof error === 'string') {
+                try {
+                    const parsed = JSON.parse(error);
+                    return parsed.message || parsed.mensaje || 'Error desconocido';
+                } catch {
+                    return error;
+                }
+            }
+            if (error && typeof error === 'object') {
+                return error.message || error.mensaje || JSON.stringify(error);
+            }
+            return 'Error desconocido';
+        }
+
         async function loadClientes() {
             const token = sessionStorage.getItem('token');
             try {
@@ -522,11 +625,10 @@
                     clientes = await response.json();
                     renderClientes(clientes);
                 } else {
-                    showAlert('Error al cargar clientes', 'error');
+                    showAlert('Error al cargar los clientes. Intenta nuevamente.', 'error');
                 }
             } catch (error) {
-                console.error('Error:', error);
-                showAlert('Error de conexión', 'error');
+                showAlert('Error de conexión. Verifica que el servidor esté disponible.', 'error');
             }
         }
 
@@ -537,7 +639,7 @@
                 tbody.innerHTML = `
                     <tr>
                         <td colspan="3" class="no-clientes">
-                            <h3>No hay clientes</h3>
+                            <h3>No hay clientes registrados</h3>
                             <p>Agrega tu primer cliente usando el botón "Nuevo Cliente"</p>
                         </td>
                     </tr>
@@ -608,10 +710,10 @@
                     showAlert('Cliente eliminado exitosamente', 'success');
                     loadClientes();
                 } else {
-                    showAlert('Error al eliminar cliente', 'error');
+                    showAlert('Error al eliminar el cliente. Intenta nuevamente.', 'error');
                 }
             } catch (error) {
-                showAlert('Error de conexión', 'error');
+                showAlert('Error de conexión. Verifica que el servidor esté disponible.', 'error');
             }
         }
 
@@ -642,10 +744,12 @@
                     closeModal();
                     loadClientes();
                 } else {
-                    showAlert('Error al guardar cliente', 'error');
+                    const errorData = await response.json().catch(() => ({message: 'Error desconocido'}));
+                    const errorMsg = parseErrorMessage(errorData);
+                    showAlert(errorMsg, 'error');
                 }
             } catch (error) {
-                showAlert('Error de conexión', 'error');
+                showAlert('Error de conexión. Verifica que el servidor esté disponible.', 'error');
             }
         });
 
@@ -654,7 +758,7 @@
             alert.className = `alert alert-${type}`;
             alert.textContent = message;
             document.getElementById('alertContainer').appendChild(alert);
-            setTimeout(() => alert.remove(), 3000);
+            setTimeout(() => alert.remove(), 4000);
         }
 
         if (checkAuth()) {
