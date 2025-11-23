@@ -92,6 +92,37 @@
             color: white;
         }
 
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            margin-left: auto;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 3px;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
         .container {
             max-width: 1400px;
             margin: 32px auto;
@@ -424,31 +455,42 @@
         }
 
         @media (max-width: 768px) {
-            .navbar-container {
-                height: auto;
-                padding: 12px 0;
-                flex-wrap: wrap;
+            .hamburger {
+                display: flex;
             }
 
-            .navbar-brand {
-                font-size: 16px;
+            .navbar-container {
+                height: 56px;
             }
 
             .navbar-menu {
-                width: 100%;
-                order: 3;
-                margin-top: 12px;
+                position: fixed;
+                top: 56px;
+                left: 0;
+                right: 0;
+                background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+                flex-direction: column;
+                padding: 16px;
+                gap: 4px;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            }
+
+            .navbar-menu.active {
+                transform: translateX(0);
             }
 
             .nav-item {
-                padding: 6px 12px;
-                font-size: 12px;
+                width: 100%;
+                padding: 12px 16px;
+                text-align: left;
             }
 
             .btn-logout {
                 margin-left: 0;
-                padding: 6px 12px;
-                font-size: 12px;
+                width: 100%;
+                margin-top: 8px;
             }
 
             .page-header {
@@ -456,52 +498,85 @@
                 align-items: flex-start;
             }
 
-            .table-container {
-                overflow-x: auto;
-            }
-
-            table {
-                min-width: 500px;
-            }
-
-            .action-buttons {
-                flex-direction: column;
-            }
-
-            .btn-edit, .btn-delete {
-                width: 100%;
-            }
-
             .page-header h1 {
                 font-size: 24px;
-            }
-
-            .container {
-                padding: 0 12px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .navbar-brand span:first-child {
-                display: none;
-            }
-
-            .page-header h1 {
-                font-size: 20px;
             }
 
             .btn-primary {
                 width: 100%;
             }
 
-            thead th {
-                padding: 12px 8px;
-                font-size: 11px;
+            .container {
+                padding: 0 12px;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            thead {
+                display: none;
+            }
+
+            tbody {
+                display: block;
+            }
+
+            tbody tr {
+                display: grid;
+                grid-template-columns: auto 1fr auto;
+                grid-template-areas: 
+                    "id nombre nombre"
+                    "actions actions actions";
+                gap: 12px;
+                padding: 16px;
+                margin-bottom: 12px;
+                background: white;
+                border-radius: 8px;
+                border: 1px solid #e2e8f0;
             }
 
             tbody td {
-                padding: 12px 8px;
-                font-size: 12px;
+                padding: 0;
+                border: none;
+            }
+
+            tbody td:nth-child(1) {
+                grid-area: id;
+            }
+
+            tbody td:nth-child(2) {
+                grid-area: nombre;
+            }
+
+            tbody td:nth-child(3) {
+                grid-area: actions;
+            }
+
+            .action-buttons {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+                width: 100%;
+            }
+
+            .btn-edit, .btn-delete {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-brand {
+                font-size: 16px;
+            }
+
+            .page-header h1 {
+                font-size: 20px;
             }
 
             .modal-content {
@@ -521,12 +596,17 @@
                 <span>🗄️</span>
                 <span>Team3System</span>
             </div>
-            <div class="navbar-menu">
+            <button class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="navbar-menu" id="navbarMenu">
                 <a href="dashboard.html" class="nav-item">Dashboard</a>
                 <a href="producto.html" class="nav-item">Productos</a>
                 <a href="cliente.html" class="nav-item active">Clientes</a>
+                <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
             </div>
-            <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
         </div>
     </nav>
 
@@ -585,6 +665,13 @@
     <script>
         const API_URL = 'https://backend.tpdteam3.com/backend/api';
         let clientes = [];
+
+        function toggleMenu() {
+            const menu = document.getElementById('navbarMenu');
+            const hamburger = document.querySelector('.hamburger');
+            menu.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
 
         function checkAuth() {
             const token = sessionStorage.getItem('token');
@@ -760,6 +847,17 @@
             document.getElementById('alertContainer').appendChild(alert);
             setTimeout(() => alert.remove(), 4000);
         }
+
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('navbarMenu');
+            const hamburger = document.querySelector('.hamburger');
+            const navbar = document.querySelector('.navbar');
+            
+            if (!navbar.contains(event.target) && menu.classList.contains('active')) {
+                menu.classList.remove('active');
+                hamburger.classList.remove('active');
+            }
+        });
 
         if (checkAuth()) {
             loadClientes();

@@ -83,7 +83,6 @@
 
         .user-info {
             text-align: right;
-            display: block;
         }
 
         .user-name {
@@ -113,6 +112,37 @@
             background: #dc2626;
             border-color: #dc2626;
             color: white;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            margin-left: auto;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 3px;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
         }
 
         .container {
@@ -250,39 +280,54 @@
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
+        /* Botón de logout en el menú principal - solo visible en móvil */
+        .navbar-menu .btn-logout {
+            display: none;
+        }
+
         @media (max-width: 768px) {
-            .navbar-container {
-                height: auto;
-                padding: 12px 0;
-                flex-wrap: wrap;
+            .hamburger {
+                display: flex;
             }
 
-            .navbar-brand {
-                font-size: 18px;
+            .navbar-container {
+                height: 56px;
             }
 
             .navbar-menu {
-                width: 100%;
-                order: 3;
-                margin-top: 12px;
+                position: fixed;
+                top: 56px;
+                left: 0;
+                right: 0;
+                background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+                flex-direction: column;
+                padding: 16px;
+                gap: 4px;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            }
+
+            .navbar-menu.active {
+                transform: translateX(0);
             }
 
             .nav-item {
-                padding: 6px 12px;
-                font-size: 12px;
+                width: 100%;
+                padding: 12px 16px;
+                text-align: left;
             }
 
             .navbar-user {
-                gap: 8px;
-            }
-
-            .user-info {
                 display: none;
             }
 
-            .btn-logout {
-                padding: 6px 12px;
-                font-size: 12px;
+            /* Botón de logout en el menú principal - visible en móvil */
+            .navbar-menu .btn-logout {
+                display: block;
+                width: 100%;
+                margin-top: 8px;
+                margin-left: 0;
             }
 
             .stats-grid {
@@ -301,28 +346,15 @@
             .container {
                 padding: 0 12px;
             }
-        }
-
-        @media (max-width: 480px) {
-            .navbar {
-                padding: 0 12px;
-            }
-
-            .navbar-brand {
-                font-size: 16px;
-            }
-
-            .navbar-brand span:first-child {
-                display: none;
-            }
-
-            .nav-item {
-                padding: 6px 8px;
-                font-size: 11px;
-            }
 
             .stat-value {
                 font-size: 28px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-brand {
+                font-size: 16px;
             }
 
             .dashboard-header h1 {
@@ -331,6 +363,10 @@
 
             .quick-actions h2 {
                 font-size: 18px;
+            }
+
+            .stat-card {
+                padding: 20px;
             }
         }
     </style>
@@ -342,16 +378,24 @@
                 <span>🗄️</span>
                 <span>Team3System</span>
             </div>
-            <div class="navbar-menu">
+            <button class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="navbar-menu" id="navbarMenu">
                 <a href="dashboard.html" class="nav-item active">Dashboard</a>
                 <a href="producto.html" class="nav-item">Productos</a>
                 <a href="cliente.html" class="nav-item">Clientes</a>
+                <!-- Botón de logout solo visible en móvil -->
+                <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
             </div>
             <div class="navbar-user">
                 <div class="user-info">
                     <div class="user-name" id="userName">Admin</div>
                     <div class="user-role">Administrador</div>
                 </div>
+                <!-- Botón de logout solo visible en escritorio -->
                 <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
             </div>
         </div>
@@ -360,7 +404,7 @@
     <div class="container">
         <div class="dashboard-header">
             <h1>Dashboard</h1>
-            <p>Resumen del sistema de gestión de inventario</p>
+            <p>Resumen del sistema de gestión</p>
         </div>
 
         <div class="stats-grid">
@@ -404,6 +448,13 @@
     <script>
         const API_URL = 'https://backend.tpdteam3.com/backend/api';
 
+        function toggleMenu() {
+            const menu = document.getElementById('navbarMenu');
+            const hamburger = document.querySelector('.hamburger');
+            menu.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+
         function checkAuth() {
             const token = sessionStorage.getItem('token');
             if (!token) {
@@ -440,7 +491,10 @@
             const token = sessionStorage.getItem('token');
             const username = sessionStorage.getItem('username');
             
-            document.getElementById('userName').textContent = username || 'Usuario';
+            const userNameElements = document.querySelectorAll('#userName');
+            userNameElements.forEach(el => {
+                el.textContent = username || 'Usuario';
+            });
 
             try {
                 const productosRes = await fetch(`${API_URL}/productos`, {
@@ -466,6 +520,17 @@
                 console.error('Error cargando estadísticas:', error);
             }
         }
+
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('navbarMenu');
+            const hamburger = document.querySelector('.hamburger');
+            const navbar = document.querySelector('.navbar');
+            
+            if (!navbar.contains(event.target) && menu.classList.contains('active')) {
+                menu.classList.remove('active');
+                hamburger.classList.remove('active');
+            }
+        });
 
         window.addEventListener('pageshow', function(event) {
             if (event.persisted) {

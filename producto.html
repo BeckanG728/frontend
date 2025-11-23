@@ -92,6 +92,37 @@
             color: white;
         }
 
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            margin-left: auto;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 3px;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
         .container {
             max-width: 1400px;
             margin: 32px auto;
@@ -178,21 +209,71 @@
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
         }
 
+        /* Nuevos estilos para lazy loading */
+        .product-image-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+        
         .product-image {
             width: 100%;
-            height: 200px;
+            height: 100%;
             object-fit: cover;
+            transition: opacity 0.3s ease;
         }
-
-        .product-image-placeholder {
+        
+        .product-image.loading {
+            opacity: 0;
+        }
+        
+        .product-image.loaded {
+            opacity: 1;
+        }
+        
+        .image-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 200px;
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            height: 100%;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: #64748b;
+            font-size: 14px;
+            text-align: center;
+            padding: 10px;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+        
+        .image-placeholder .icon {
             font-size: 48px;
+            margin-bottom: 12px;
+            opacity: 0.7;
+        }
+        
+        .image-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .loading-spinner {
+            width: 24px;
+            height: 24px;
+            border: 2px solid rgba(100, 116, 139, 0.3);
+            border-radius: 50%;
+            border-top-color: #64748b;
+            animation: spin 1s linear infinite;
+            margin-bottom: 8px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         .product-body {
@@ -466,31 +547,42 @@
         }
 
         @media (max-width: 768px) {
-            .navbar-container {
-                height: auto;
-                padding: 12px 0;
-                flex-wrap: wrap;
+            .hamburger {
+                display: flex;
             }
 
-            .navbar-brand {
-                font-size: 16px;
+            .navbar-container {
+                height: 56px;
             }
 
             .navbar-menu {
-                width: 100%;
-                order: 3;
-                margin-top: 12px;
+                position: fixed;
+                top: 56px;
+                left: 0;
+                right: 0;
+                background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+                flex-direction: column;
+                padding: 16px;
+                gap: 4px;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            }
+
+            .navbar-menu.active {
+                transform: translateX(0);
             }
 
             .nav-item {
-                padding: 6px 12px;
-                font-size: 12px;
+                width: 100%;
+                padding: 12px 16px;
+                text-align: left;
             }
 
             .btn-logout {
                 margin-left: 0;
-                padding: 6px 12px;
-                font-size: 12px;
+                width: 100%;
+                margin-top: 8px;
             }
 
             .products-grid {
@@ -507,22 +599,22 @@
                 font-size: 24px;
             }
 
+            .btn-primary {
+                width: 100%;
+            }
+
             .container {
                 padding: 0 12px;
             }
         }
 
         @media (max-width: 480px) {
-            .navbar-brand span:first-child {
-                display: none;
+            .navbar-brand {
+                font-size: 16px;
             }
 
             .page-header h1 {
                 font-size: 20px;
-            }
-
-            .btn-primary {
-                width: 100%;
             }
 
             .products-grid {
@@ -555,12 +647,17 @@
                 <span>🗄️</span>
                 <span>Team3System</span>
             </div>
-            <div class="navbar-menu">
+            <button class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="navbar-menu" id="navbarMenu">
                 <a href="dashboard.html" class="nav-item">Dashboard</a>
                 <a href="producto.html" class="nav-item active">Productos</a>
                 <a href="cliente.html" class="nav-item">Clientes</a>
+                <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
             </div>
-            <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
         </div>
     </nav>
 
@@ -635,7 +732,11 @@
         let productos = [];
         let currentProductId = null;
         const imageCache = new Map();
+        const imageLoadPromises = new Map();
+        const imageControllers = new Map();
+        let imageObserver = null;
 
+        // Función para verificar autenticación
         function checkAuth() {
             const token = sessionStorage.getItem('token');
             if (!token) {
@@ -643,6 +744,13 @@
                 return false;
             }
             return true;
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('navbarMenu');
+            const hamburger = document.querySelector('.hamburger');
+            menu.classList.toggle('active');
+            hamburger.classList.toggle('active');
         }
 
         function parseErrorMessage(error) {
@@ -660,28 +768,146 @@
             return 'Error desconocido';
         }
 
-        async function loadProductImage(productId) {
+        // Función para inicializar el Intersection Observer para lazy loading
+        function initImageObserver() {
+            if (imageObserver) {
+                imageObserver.disconnect();
+            }
+            
+            imageObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const container = entry.target;
+                        const productId = parseInt(container.dataset.productId);
+                        const product = productos.find(p => p.codiProd === productId);
+                        
+                        // Solo cargar imagen si el producto tiene imagenId
+                        if (product && product.imagenId) {
+                            loadProductImage(productId, container);
+                        }
+                        imageObserver.unobserve(container);
+                    }
+                });
+            }, {
+                rootMargin: '50px 0px',
+                threshold: 0.1
+            });
+        }
+
+        // Función para cargar imagen de producto con lazy loading
+        async function loadProductImage(productId, container) {
+            // Si ya está en caché, usar directamente
             if (imageCache.has(productId)) {
-                return imageCache.get(productId);
+                updateProductImageUI(productId, container, imageCache.get(productId));
+                return;
+            }
+            
+            // Si ya hay una petición en curso, esperar a que termine
+            if (imageLoadPromises.has(productId)) {
+                try {
+                    const imageUrl = await imageLoadPromises.get(productId);
+                    updateProductImageUI(productId, container, imageUrl);
+                } catch (error) {
+                    showImageError(productId, container);
+                }
+                return;
+            }
+            
+            // Crear nueva petición
+            const controller = new AbortController();
+            imageControllers.set(productId, controller);
+            
+            const loadPromise = fetchProductImage(productId, controller.signal);
+            imageLoadPromises.set(productId, loadPromise);
+            
+            try {
+                const imageUrl = await loadPromise;
+                imageCache.set(productId, imageUrl);
+                updateProductImageUI(productId, container, imageUrl);
+            } catch (error) {
+                if (error.name !== 'AbortError') {
+                    showImageError(productId, container);
+                }
+            } finally {
+                imageLoadPromises.delete(productId);
+                imageControllers.delete(productId);
+            }
+        }
+
+        // Función para hacer la petición de imagen
+        async function fetchProductImage(productId, signal) {
+            const token = sessionStorage.getItem('token');
+            const response = await fetch(`${API_URL}/imagenes/download/${productId}`, {
+                headers: { 'Authorization': `Bearer ${token}` },
+                signal: signal
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
             }
 
-            try {
-                const token = sessionStorage.getItem('token');
-                const response = await fetch(`${API_URL}/imagenes/download/${productId}`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
+            const blob = await response.blob();
+            return URL.createObjectURL(blob);
+        }
 
-                if (!response.ok) {
-                    return null;
-                }
+        // Función para actualizar la UI con la imagen cargada
+        function updateProductImageUI(productId, container, imageUrl) {
+            const product = productos.find(p => p.codiProd === productId);
+            if (!product || !container) return;
+            
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            img.alt = product.nombProd;
+            img.className = 'product-image loaded';
+            
+            // Reemplazar el placeholder con la imagen
+            container.innerHTML = '';
+            container.appendChild(img);
+        }
 
-                const blob = await response.blob();
-                const imageUrl = URL.createObjectURL(blob);
-                imageCache.set(productId, imageUrl);
-                
-                return imageUrl;
-            } catch (error) {
-                return null;
+        // Función para mostrar error de carga de imagen
+        function showImageError(productId, container) {
+            if (!container) return;
+            
+            // En caso de error, mostrar el icono de "sin imagen"
+            showNoImagePlaceholder(container);
+        }
+
+        // Función para mostrar placeholder de "sin imagen"
+        function showNoImagePlaceholder(container) {
+            container.innerHTML = `
+                <div class="image-placeholder">
+                    <div class="icon">📦</div>
+                    <div>Sin imagen</div>
+                </div>
+            `;
+        }
+
+        // Función para cancelar carga de imágenes
+        function cancelImageLoad(productId) {
+            if (imageControllers.has(productId)) {
+                imageControllers.get(productId).abort();
+                imageControllers.delete(productId);
+            }
+            imageLoadPromises.delete(productId);
+        }
+
+        // Función para generar el placeholder de imagen basado en si tiene imagen o no
+        function getImagePlaceholder(product) {
+            if (product.imagenId) {
+                return `
+                    <div class="image-placeholder image-loading">
+                        <div class="loading-spinner"></div>
+                        <div>Cargando imagen...</div>
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class="image-placeholder">
+                        <div class="icon">📦</div>
+                        <div>Sin imagen</div>
+                    </div>
+                `;
             }
         }
 
@@ -708,8 +934,10 @@
             }
         }
 
+        // Función para renderizar productos con lazy loading
         async function renderProductos(products) {
             const container = document.getElementById('productsContainer');
+            
             if (products.length === 0) {
                 container.innerHTML = `
                     <div class="no-products">
@@ -720,10 +948,11 @@
                 return;
             }
 
+            // Crear HTML para todos los productos
             container.innerHTML = products.map(p => `
-                <div class="product-card">
-                    <div class="product-image-placeholder" id="img-${p.codiProd}">
-                        ${p.imagenId ? '⏳' : '📦'}
+                <div class="product-card" data-product-id="${p.codiProd}">
+                    <div class="product-image-container" data-product-id="${p.codiProd}" id="img-container-${p.codiProd}">
+                        ${getImagePlaceholder(p)}
                     </div>
                     <div class="product-body">
                         <div class="product-name">${p.nombProd}</div>
@@ -740,17 +969,45 @@
                 </div>
             `).join('');
 
-            for (const p of products) {
-                if (p.imagenId) {
-                    const imageUrl = await loadProductImage(p.codiProd);
-                    const imgContainer = document.getElementById(`img-${p.codiProd}`);
-                    
-                    if (imageUrl && imgContainer) {
-                        imgContainer.className = 'product-image';
-                        imgContainer.innerHTML = `<img src="${imageUrl}" alt="${p.nombProd}" style="width: 100%; height: 100%; object-fit: cover;">`;
+            // Inicializar observer para lazy loading
+            initImageObserver();
+            
+            // Observar solo los contenedores de productos que tienen imagen
+            products.forEach(p => {
+                const imgContainer = document.getElementById(`img-container-${p.codiProd}`);
+                if (imgContainer && p.imagenId) {
+                    // Si la imagen ya está en caché, cargarla inmediatamente
+                    if (imageCache.has(p.codiProd)) {
+                        updateProductImageUI(p.codiProd, imgContainer, imageCache.get(p.codiProd));
+                    } else {
+                        // Si no, observar para lazy loading
+                        imageObserver.observe(imgContainer);
                     }
                 }
-            }
+                // Los productos sin imagenId ya muestran el icono por defecto
+            });
+        }
+
+        // Modificar la función updateProductImage para usar el nuevo sistema
+        async function updateProductImage(productId) {
+            // Limpiar caché para forzar recarga
+            imageCache.delete(productId);
+            cancelImageLoad(productId);
+            
+            // Buscar el contenedor de imagen
+            const container = document.getElementById(`img-container-${productId}`);
+            if (!container) return;
+            
+            // Mostrar placeholder de carga
+            container.innerHTML = `
+                <div class="image-placeholder image-loading">
+                    <div class="loading-spinner"></div>
+                    <div>Actualizando imagen...</div>
+                </div>
+            `;
+            
+            // Cargar nueva imagen
+            await loadProductImage(productId, container);
         }
 
         function filterProducts() {
@@ -792,7 +1049,6 @@
 
         function closeImageModal() {
             document.getElementById('imageModal').classList.remove('active');
-            currentProductId = null;
         }
 
         function editProduct(id) {
@@ -810,6 +1066,8 @@
                 });
                 if (response.ok) {
                     showAlert('Producto eliminado exitosamente', 'success');
+                    imageCache.delete(id);
+                    cancelImageLoad(id);
                     loadProductos();
                 } else {
                     showAlert('Error al eliminar el producto. Intenta nuevamente.', 'error');
@@ -899,14 +1157,28 @@
 
         document.getElementById('imageForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            if (!currentProductId) {
+                showAlert('Error: No se ha seleccionado un producto', 'error');
+                closeImageModal();
+                return;
+            }
+            
             const token = sessionStorage.getItem('token');
             const file = document.getElementById('imageFile').files[0];
 
+            if (!file) {
+                showAlert('Por favor selecciona una imagen', 'error');
+                return;
+            }
+
             const formData = new FormData();
             formData.append('file', file);
+            
+            const productIdToUpdate = currentProductId;
 
             try {
-                const response = await fetch(`${API_URL}/imagenes/upload/${currentProductId}`, {
+                const response = await fetch(`${API_URL}/imagenes/upload/${productIdToUpdate}`, {
                     method: 'POST',
                     headers: { 'Authorization': `Bearer ${token}` },
                     body: formData
@@ -914,8 +1186,30 @@
 
                 if (response.ok) {
                     showAlert('Imagen subida exitosamente', 'success');
+                    
+                    // Recargar datos del producto actualizado desde el servidor
+                    const productResponse = await fetch(`${API_URL}/productos/${productIdToUpdate}`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    
+                    if (productResponse.ok) {
+                        const updatedProduct = await productResponse.json();
+                        
+                        // Actualizar el producto en el array local
+                        const productIndex = productos.findIndex(p => p.codiProd === productIdToUpdate);
+                        if (productIndex !== -1) {
+                            productos[productIndex] = updatedProduct;
+                        }
+                        
+                        // Ahora actualizar la imagen en la UI
+                        await updateProductImage(productIdToUpdate);
+                    } else {
+                        showAlert('Imagen subida pero no se pudo actualizar la vista. Recarga la página.', 'warning');
+                    }
+                    
+                    // Cerrar modal y resetear después de completar todo
                     closeImageModal();
-                    loadProductos();
+                    currentProductId = null;
                 } else {
                     const errorData = await response.json().catch(() => ({message: 'Error al subir la imagen'}));
                     const errorMsg = parseErrorMessage(errorData);
@@ -934,6 +1228,17 @@
             setTimeout(() => alert.remove(), 4000);
         }
 
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('navbarMenu');
+            const hamburger = document.querySelector('.hamburger');
+            const navbar = document.querySelector('.navbar');
+            
+            if (!navbar.contains(event.target) && menu.classList.contains('active')) {
+                menu.classList.remove('active');
+                hamburger.classList.remove('active');
+            }
+        });
+
         window.addEventListener('pageshow', function(event) {
             if (event.persisted) {
                 if (!sessionStorage.getItem('token')) {
@@ -942,6 +1247,16 @@
             }
         });
 
+        // Limpiar recursos cuando se cierra la página
+        window.addEventListener('beforeunload', () => {
+            // Cancelar todas las peticiones pendientes
+            imageControllers.forEach(controller => controller.abort());
+            
+            // Liberar URLs de objetos blob
+            imageCache.forEach(url => URL.revokeObjectURL(url));
+        });
+
+        // Inicializar cuando se carga la página
         if (checkAuth()) {
             loadProductos();
         }
