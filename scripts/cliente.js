@@ -53,12 +53,15 @@ export async function viewLoadedCliente({ API_URL } = {}) {
         </td>
       </tr>
     `).join('');
-    attachHandlers();
   }
 
   function attachHandlers() {
     const tbody = qs('#clientesBody');
-    tbody.addEventListener('click', async (e) => {
+    // Remover listeners anteriores para evitar duplicados
+    const newTbody = tbody.cloneNode(false);
+    tbody.parentNode.replaceChild(newTbody, tbody);
+    
+    newTbody.addEventListener('click', async (e) => {
       const edit = e.target.closest('[data-edit]');
       const del = e.target.closest('[data-delete]');
       if (edit) {
@@ -78,6 +81,11 @@ export async function viewLoadedCliente({ API_URL } = {}) {
     qs('#clienteForm').reset();
     if (id) {
       const c = clientes.find(x => x.codiClie === id);
+      if (!c) {
+        showAlert('Cliente no encontrado', 'error');
+        closeModal();
+        return;
+      }
       qs('#modalTitleText').textContent = 'Editar Cliente';
       qs('#modalIcon').textContent = 'edit';
       qs('#clienteId').value = c.codiClie;
@@ -94,18 +102,33 @@ export async function viewLoadedCliente({ API_URL } = {}) {
     const modal = qs('#clienteModal');
     modal.classList.remove('active');
     modal.setAttribute('aria-hidden','true');
+    
+    // Resetear el botón de submit a su estado original
+    const form = qs('#clienteForm');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = '<span class="material-icons" aria-hidden="true">save</span>Guardar';
   }
 
   async function deleteCliente(id) {
     const cliente = clientes.find(c => c.codiClie === id);
+    if (!cliente) return;
+    
     if (!confirm(`¿Eliminar cliente "${cliente.nombClie}"?`)) return;
+    
     try {
       const token = sessionStorage.getItem('token');
-      const res = await fetch(`${api}/clientes/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` }});
+      const res = await fetch(`${api}/clientes/${id}`, { 
+        method: 'DELETE', 
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
       if (res.ok) {
         showAlert('Cliente eliminado.', 'success');
         await loadClientes();
-      } else showAlert('No se pudo eliminar.', 'error');
+      } else {
+        showAlert('No se pudo eliminar.', 'error');
+      }
     } catch {
       showAlert('Error de conexión.', 'error');
     }
@@ -114,38 +137,94 @@ export async function viewLoadedCliente({ API_URL } = {}) {
   // bind forms & buttons
   function bindUI() {
     const newBtn = qs('#btnNewClient');
-    if (newBtn) newBtn.addEventListener('click', () => openModal());
-    const closeBtn = qs('#clienteModalClose'); if (closeBtn) closeBtn.addEventListener('click', closeModal);
-    const cancelBtn = qs('#clienteFormCancel'); if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
-    qs('#clienteForm').addEventListener('submit', async (e) => {
+    if (newBtn) {
+      // Remover listeners anteriores
+      const newButton = newBtn.cloneNode(true);
+      newBtn.parentNode.replaceChild(newButton, newBtn);
+      newButton.addEventListener('click', () => openModal());
+    }
+    
+    const closeBtn = qs('#clienteModalClose');
+    if (closeBtn) {
+      const newCloseBtn = closeBtn.cloneNode(true);
+      closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
+      newCloseBtn.addEventListener('click', closeModal);
+    }
+    
+    const cancelBtn = qs('#clienteFormCancel');
+    if (cancelBtn) {
+      const newCancelBtn = cancelBtn.cloneNode(true);
+      cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+      newCancelBtn.addEventListener('click', closeModal);
+    }
+    
+    const form = qs('#clienteForm');
+    // Remover listener anterior
+    const newForm = form.cloneNode(true);
+    form.parentNode.replaceChild(newForm, form);
+    
+    newForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const id = qs('#clienteId').value;
       const data = { nombClie: qs('#clienteName').value.trim() };
+      
+      if (!data.nombClie) {
+        showAlert('El nombre del cliente es requerido', 'error');
+        return;
+      }
+      
+      const submitBtn = newForm.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="loading-spinner"></span> Guardando...';
+      
       try {
         const token = sessionStorage.getItem('token');
         const url = id ? `${api}/clientes/${id}` : `${api}/clientes`;
         const method = id ? 'PUT' : 'POST';
-        const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify(data) });
+        const res = await fetch(url, { 
+          method, 
+          headers: { 
+            'Content-Type': 'application/json', 
+            'Authorization': `Bearer ${token}` 
+          }, 
+          body: JSON.stringify(data) 
+        });
+        
         if (res.ok) {
           showAlert(id ? 'Cliente actualizado.' : 'Cliente creado.', 'success');
-          closeModal(); await loadClientes();
+          closeModal(); 
+          await loadClientes();
+          attachHandlers();
         } else {
           const err = await res.json().catch(()=>({ mensaje: 'Error desconocido' }));
           showAlert(parseErrorMessage(err), 'error');
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
         }
       } catch {
         showAlert('Error de conexión.', 'error');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
       }
     });
+    
     // search
     const search = qs('#searchInput');
-    if (search) search.addEventListener('input', () => {
-      const q = search.value.toLowerCase();
-      const filtered = clientes.filter(c => (c.nombClie || '').toLowerCase().includes(q) || c.codiClie.toString().includes(q));
-      renderClientes(filtered);
-    });
+    if (search) {
+      // Remover listener anterior
+      const newSearch = search.cloneNode(true);
+      search.parentNode.replaceChild(newSearch, search);
+      newSearch.addEventListener('input', () => {
+        const q = newSearch.value.toLowerCase();
+        const filtered = clientes.filter(c => (c.nombClie || '').toLowerCase().includes(q) || c.codiClie.toString().includes(q));
+        renderClientes(filtered);
+        attachHandlers();
+      });
+    }
   }
 
-  bindUI();
   await loadClientes();
+  attachHandlers();
+  bindUI();
 }
