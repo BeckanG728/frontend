@@ -4,189 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Productos - Team3System</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f0f4f8;
-        }
-
-        .navbar {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            color: white;
-            padding: 0 16px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .navbar-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 64px;
-            gap: 16px;
-        }
-
-        .navbar-brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 20px;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .navbar-menu {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex: 1;
-        }
-
-        .nav-item {
-            padding: 8px 16px;
-            border-radius: 8px;
-            text-decoration: none;
-            color: #cbd5e1;
-            font-weight: 500;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-        }
-
-        .nav-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-
-        .nav-item.active {
-            background: rgba(59, 130, 246, 0.15);
-            color: #60a5fa;
-        }
-
-        .btn-logout {
-            padding: 8px 16px;
-            background: rgba(239, 68, 68, 0.1);
-            border: 2px solid rgba(239, 68, 68, 0.3);
-            color: #f87171;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            transition: all 0.3s ease;
-            margin-left: auto;
-        }
-
-        .btn-logout:hover {
-            background: #dc2626;
-            border-color: #dc2626;
-            color: white;
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 4px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-            margin-left: auto;
-        }
-
-        .hamburger span {
-            width: 24px;
-            height: 3px;
-            background: white;
-            border-radius: 2px;
-            transition: all 0.3s ease;
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(6px, 6px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(6px, -6px);
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 32px auto;
-            padding: 0 16px;
-        }
-
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 28px;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-
-        .page-header h1 {
-            color: #0f172a;
-            font-size: 32px;
-            font-weight: 700;
-        }
-
-        .btn-primary {
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
-            font-size: 14px;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-
         .search-bar {
-            background: #FFFFFF;
+            background: #1a1a1a;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            border: 1px solid #333;
             margin-bottom: 20px;
-        }
-
-        .search-bar input {
-            width: 100%;
-            padding: 12px 14px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 14px;
-            color: #0f172a;
-            background: #f8fafc;
-            transition: all 0.3s ease;
-        }
-
-        .search-bar input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .products-grid {
@@ -196,26 +23,25 @@
         }
 
         .product-card {
-            background: #FFFFFF;
+            background: #1a1a1a;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            border: 1px solid #333;
             transition: all 0.3s ease;
         }
 
         .product-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
         }
 
-        /* Nuevos estilos para lazy loading */
         .product-image-container {
             position: relative;
             width: 100%;
             height: 200px;
             overflow: hidden;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            background: #2a2a2a;
         }
         
         .product-image {
@@ -243,17 +69,18 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: #64748b;
+            color: #666666;
             font-size: 14px;
             text-align: center;
             padding: 10px;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            background: #2a2a2a;
         }
         
-        .image-placeholder .icon {
+        .image-placeholder .material-icons {
             font-size: 48px;
             margin-bottom: 12px;
             opacity: 0.7;
+            color: #F19E39;
         }
         
         .image-loading {
@@ -265,9 +92,9 @@
         .loading-spinner {
             width: 24px;
             height: 24px;
-            border: 2px solid rgba(100, 116, 139, 0.3);
+            border: 2px solid rgba(102, 102, 102, 0.3);
             border-radius: 50%;
-            border-top-color: #64748b;
+            border-top-color: #666666;
             animation: spin 1s linear infinite;
             margin-bottom: 8px;
         }
@@ -283,7 +110,7 @@
         .product-name {
             font-size: 18px;
             font-weight: 700;
-            color: #0f172a;
+            color: #ffffff;
             margin-bottom: 12px;
             line-height: 1.3;
             min-height: 54px;
@@ -304,13 +131,13 @@
         }
 
         .stock-badge {
-            background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+            background: #f59e0b;
             color: white;
             padding: 6px 12px;
             border-radius: 6px;
             font-size: 12px;
             font-weight: 600;
-            box-shadow: 0 2px 6px rgba(245, 158, 11, 0.2);
+            box-shadow: 0 2px 6px rgba(245, 158, 11, 0.3);
         }
 
         .product-actions {
@@ -319,10 +146,12 @@
             gap: 8px;
         }
 
-        .btn-edit, .btn-delete, .btn-image {
-            padding: 9px;
+        .btn-image {
+            background: #10b981;
+            color: white;
             border: none;
             border-radius: 6px;
+            padding: 9px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -330,42 +159,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .btn-edit {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            color: white;
-            box-shadow: 0 1px 4px rgba(59, 130, 246, 0.2);
-        }
-
-        .btn-edit:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
-        }
-
-        .btn-delete {
-            background: #dc2626;
-            color: white;
-            box-shadow: 0 1px 4px rgba(220, 38, 38, 0.2);
-        }
-
-        .btn-delete:hover {
-            background: #b91c1c;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 6px rgba(220, 38, 38, 0.3);
-        }
-
-        .btn-image {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            box-shadow: 0 1px 4px rgba(16, 185, 129, 0.2);
+            gap: 4px;
         }
 
         .btn-image:hover {
+            background: #059669;
             transform: translateY(-1px);
-            box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
         }
 
+        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -373,7 +175,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.8);
             z-index: 2000;
             align-items: center;
             justify-content: center;
@@ -386,14 +188,15 @@
         }
 
         .modal-content {
-            background: #FFFFFF;
+            background: #1a1a1a;
             padding: 28px;
             border-radius: 12px;
             max-width: 480px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.8);
+            border: 1px solid #333;
         }
 
         .modal-header {
@@ -404,20 +207,23 @@
         }
 
         .modal-header h2 {
-            color: #0f172a;
+            color: #ffffff;
             font-size: 22px;
             font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .btn-close {
-            background: #f1f5f9;
+            background: #333333;
             border: none;
             width: 32px;
             height: 32px;
             border-radius: 6px;
             font-size: 22px;
             cursor: pointer;
-            color: #64748b;
+            color: #cccccc;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
@@ -425,38 +231,8 @@
         }
 
         .btn-close:hover {
-            background: #e2e8f0;
-            color: #0f172a;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            color: #1e293b;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 13px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px 14px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 14px;
-            color: #0f172a;
-            background: #f8fafc;
-            transition: all 0.3s ease;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            background: #444444;
+            color: #ffffff;
         }
 
         .form-actions {
@@ -467,8 +243,8 @@
         .btn-cancel {
             flex: 1;
             padding: 12px;
-            background: #f1f5f9;
-            color: #475569;
+            background: #333333;
+            color: #cccccc;
             border: none;
             border-radius: 8px;
             font-weight: 600;
@@ -478,147 +254,34 @@
         }
 
         .btn-cancel:hover {
-            background: #e2e8f0;
-            color: #1e293b;
+            background: #444444;
+            color: #ffffff;
         }
 
         .btn-save {
             flex: 1;
             padding: 12px;
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            background: #3b82f6;
             color: white;
             border: none;
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
             transition: all 0.3s ease;
             font-size: 14px;
         }
 
         .btn-save:hover {
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-
-        .alert {
-            padding: 12px 14px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-weight: 500;
-            font-size: 13px;
-        }
-
-        .alert-success {
-            background: #d1fae5;
-            color: #065f46;
-            border-left: 4px solid #10b981;
-        }
-
-        .alert-error {
-            background: #fee2e2;
-            color: #991b1b;
-            border-left: 4px solid #dc2626;
-        }
-
-        .alert-warning {
-            background: #fef3c7;
-            color: #92400e;
-            border-left: 4px solid #f59e0b;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 32px;
-            color: #64748b;
-        }
-
-        .no-products {
-            text-align: center;
-            padding: 48px 20px;
-            color: #64748b;
-        }
-
-        .no-products h3 {
-            font-size: 20px;
-            margin-bottom: 8px;
-            color: #1e293b;
-            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+            background: #2563eb;
         }
 
         @media (max-width: 768px) {
-            .hamburger {
-                display: flex;
-            }
-
-            .navbar-container {
-                height: 56px;
-            }
-
-            .navbar-menu {
-                position: fixed;
-                top: 56px;
-                left: 0;
-                right: 0;
-                background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-                flex-direction: column;
-                padding: 16px;
-                gap: 4px;
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            }
-
-            .navbar-menu.active {
-                transform: translateX(0);
-            }
-
-            .nav-item {
-                width: 100%;
-                padding: 12px 16px;
-                text-align: left;
-            }
-
-            .btn-logout {
-                margin-left: 0;
-                width: 100%;
-                margin-top: 8px;
-            }
-
             .products-grid {
                 grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
                 gap: 16px;
-            }
-
-            .page-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .page-header h1 {
-                font-size: 24px;
-            }
-
-            .btn-primary {
-                width: 100%;
-            }
-
-            .container {
-                padding: 0 12px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .navbar-brand {
-                font-size: 16px;
-            }
-
-            .page-header h1 {
-                font-size: 20px;
-            }
-
-            .products-grid {
-                grid-template-columns: 1fr;
             }
 
             .product-name {
@@ -638,51 +301,82 @@
                 font-size: 18px;
             }
         }
+
+        @media (max-width: 480px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="navbar-container">
-            <div class="navbar-brand">
-                <span>🗄️</span>
-                <span>Team3System</span>
-            </div>
-            <button class="hamburger" onclick="toggleMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <span class="material-icons">inventory_2</span>
+            <span class="sidebar-brand">Team3System</span>
+        </div>
+        <div class="sidebar-menu">
+            <a href="dashboard.html" class="nav-item">
+                <span class="material-icons">dashboard</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="producto.html" class="nav-item active">
+                <span class="material-icons">inventory</span>
+                <span>Productos</span>
+            </a>
+            <a href="cliente.html" class="nav-item">
+                <span class="material-icons">people</span>
+                <span>Clientes</span>
+            </a>
+        </div>
+        <div class="sidebar-footer">
+            <button class="btn-logout" onclick="logout()">
+                <span class="material-icons">logout</span>
+                <span>Cerrar Sesión</span>
             </button>
-            <div class="navbar-menu" id="navbarMenu">
-                <a href="dashboard.html" class="nav-item">Dashboard</a>
-                <a href="producto.html" class="nav-item active">Productos</a>
-                <a href="cliente.html" class="nav-item">Clientes</a>
-                <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
-            </div>
         </div>
     </nav>
 
-    <div class="container">
-        <div class="page-header">
-            <h1>📦 Productos</h1>
-            <button class="btn-primary" onclick="openModal()">+ Nuevo Producto</button>
-        </div>
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <button class="sidebar-toggle" onclick="toggleSidebar()">
+            <span class="material-icons">menu</span>
+        </button>
 
-        <div id="alertContainer"></div>
+        <div class="container">
+            <div class="page-header">
+                <h1>
+                    <span class="material-icons">inventory</span>
+                    Productos
+                </h1>
+                <button class="btn-primary" onclick="openModal()">
+                    <span class="material-icons">add</span>
+                    Nuevo Producto
+                </button>
+            </div>
 
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="🔍 Buscar productos..." 
-                   onkeyup="filterProducts()">
-        </div>
+            <div id="alertContainer"></div>
 
-        <div id="productsContainer" class="products-grid">
-            <div class="loading">Cargando productos...</div>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="🔍 Buscar productos..." 
+                       onkeyup="filterProducts()">
+            </div>
+
+            <div id="productsContainer" class="products-grid">
+                <div class="loading">Cargando productos...</div>
+            </div>
         </div>
     </div>
 
+    <!-- Product Modal -->
     <div id="productModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modalTitle">Nuevo Producto</h2>
+                <h2>
+                    <span class="material-icons" id="modalIcon">add_box</span>
+                    <span id="modalTitle">Nuevo Producto</span>
+                </h2>
                 <button class="btn-close" onclick="closeModal()">&times;</button>
             </div>
             <form id="productForm">
@@ -702,16 +396,23 @@
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn-cancel" onclick="closeModal()">Cancelar</button>
-                    <button type="submit" class="btn-save">Guardar</button>
+                    <button type="submit" class="btn-save">
+                        <span class="material-icons">save</span>
+                        Guardar
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 
+    <!-- Image Modal -->
     <div id="imageModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Subir Imagen</h2>
+                <h2>
+                    <span class="material-icons">image</span>
+                    Subir Imagen
+                </h2>
                 <button class="btn-close" onclick="closeImageModal()">&times;</button>
             </div>
             <form id="imageForm">
@@ -721,7 +422,10 @@
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn-cancel" onclick="closeImageModal()">Cancelar</button>
-                    <button type="submit" class="btn-save">Subir Imagen</button>
+                    <button type="submit" class="btn-save">
+                        <span class="material-icons">upload</span>
+                        Subir Imagen
+                    </button>
                 </div>
             </form>
         </div>
@@ -736,7 +440,13 @@
         const imageControllers = new Map();
         let imageObserver = null;
 
-        // Función para verificar autenticación
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const mainContent = document.getElementById('mainContent');
+            sidebar.classList.toggle('active');
+            mainContent.classList.toggle('sidebar-hidden');
+        }
+
         function checkAuth() {
             const token = sessionStorage.getItem('token');
             if (!token) {
@@ -746,11 +456,10 @@
             return true;
         }
 
-        function toggleMenu() {
-            const menu = document.getElementById('navbarMenu');
-            const hamburger = document.querySelector('.hamburger');
-            menu.classList.toggle('active');
-            hamburger.classList.toggle('active');
+        function logout() {
+            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('username');
+            window.location.href = 'index.html';
         }
 
         function parseErrorMessage(error) {
@@ -781,7 +490,6 @@
                         const productId = parseInt(container.dataset.productId);
                         const product = productos.find(p => p.codiProd === productId);
                         
-                        // Solo cargar imagen si el producto tiene imagenId
                         if (product && product.imagenId) {
                             loadProductImage(productId, container);
                         }
@@ -794,15 +502,12 @@
             });
         }
 
-        // Función para cargar imagen de producto con lazy loading
         async function loadProductImage(productId, container) {
-            // Si ya está en caché, usar directamente
             if (imageCache.has(productId)) {
                 updateProductImageUI(productId, container, imageCache.get(productId));
                 return;
             }
             
-            // Si ya hay una petición en curso, esperar a que termine
             if (imageLoadPromises.has(productId)) {
                 try {
                     const imageUrl = await imageLoadPromises.get(productId);
@@ -813,7 +518,6 @@
                 return;
             }
             
-            // Crear nueva petición
             const controller = new AbortController();
             imageControllers.set(productId, controller);
             
@@ -834,7 +538,6 @@
             }
         }
 
-        // Función para hacer la petición de imagen
         async function fetchProductImage(productId, signal) {
             const token = sessionStorage.getItem('token');
             const response = await fetch(`${API_URL}/imagenes/download/${productId}`, {
@@ -850,7 +553,6 @@
             return URL.createObjectURL(blob);
         }
 
-        // Función para actualizar la UI con la imagen cargada
         function updateProductImageUI(productId, container, imageUrl) {
             const product = productos.find(p => p.codiProd === productId);
             if (!product || !container) return;
@@ -860,30 +562,24 @@
             img.alt = product.nombProd;
             img.className = 'product-image loaded';
             
-            // Reemplazar el placeholder con la imagen
             container.innerHTML = '';
             container.appendChild(img);
         }
 
-        // Función para mostrar error de carga de imagen
         function showImageError(productId, container) {
             if (!container) return;
-            
-            // En caso de error, mostrar el icono de "sin imagen"
             showNoImagePlaceholder(container);
         }
 
-        // Función para mostrar placeholder de "sin imagen"
         function showNoImagePlaceholder(container) {
             container.innerHTML = `
                 <div class="image-placeholder">
-                    <div class="icon">📦</div>
+                    <span class="material-icons">inventory_2</span>
                     <div>Sin imagen</div>
                 </div>
             `;
         }
 
-        // Función para cancelar carga de imágenes
         function cancelImageLoad(productId) {
             if (imageControllers.has(productId)) {
                 imageControllers.get(productId).abort();
@@ -892,7 +588,6 @@
             imageLoadPromises.delete(productId);
         }
 
-        // Función para generar el placeholder de imagen basado en si tiene imagen o no
         function getImagePlaceholder(product) {
             if (product.imagenId) {
                 return `
@@ -904,17 +599,11 @@
             } else {
                 return `
                     <div class="image-placeholder">
-                        <div class="icon">📦</div>
+                        <span class="material-icons">inventory_2</span>
                         <div>Sin imagen</div>
                     </div>
                 `;
             }
-        }
-
-        function logout() {
-            sessionStorage.removeItem('token');
-            sessionStorage.removeItem('username');
-            window.location.href = 'index.html';
         }
 
         async function loadProductos() {
@@ -934,13 +623,12 @@
             }
         }
 
-        // Función para renderizar productos con lazy loading
         async function renderProductos(products) {
             const container = document.getElementById('productsContainer');
             
             if (products.length === 0) {
                 container.innerHTML = `
-                    <div class="no-products">
+                    <div class="no-data">
                         <h3>No hay productos registrados</h3>
                         <p>Agrega tu primer producto usando el botón "Nuevo Producto"</p>
                     </div>
@@ -948,7 +636,6 @@
                 return;
             }
 
-            // Crear HTML para todos los productos
             container.innerHTML = products.map(p => `
                 <div class="product-card" data-product-id="${p.codiProd}">
                     <div class="product-image-container" data-product-id="${p.codiProd}" id="img-container-${p.codiProd}">
@@ -961,44 +648,44 @@
                             <span class="stock-badge">Stock: ${p.stocProd}</span>
                         </div>
                         <div class="product-actions">
-                            <button class="btn-edit" onclick="editProduct(${p.codiProd})">✏️</button>
-                            <button class="btn-image" onclick="openImageModal(${p.codiProd})">🖼️</button>
-                            <button class="btn-delete" onclick="deleteProduct(${p.codiProd})">🗑️</button>
+                            <button class="btn-edit" onclick="editProduct(${p.codiProd})">
+                                <span class="material-icons">edit</span>
+                                Editar
+                            </button>
+                            <button class="btn-image" onclick="openImageModal(${p.codiProd})">
+                                <span class="material-icons">image</span>
+                                Imagen
+                            </button>
+                            <button class="btn-delete" onclick="deleteProduct(${p.codiProd})">
+                                <span class="material-icons">delete</span>
+                                Eliminar
+                            </button>
                         </div>
                     </div>
                 </div>
             `).join('');
 
-            // Inicializar observer para lazy loading
             initImageObserver();
             
-            // Observar solo los contenedores de productos que tienen imagen
             products.forEach(p => {
                 const imgContainer = document.getElementById(`img-container-${p.codiProd}`);
                 if (imgContainer && p.imagenId) {
-                    // Si la imagen ya está en caché, cargarla inmediatamente
                     if (imageCache.has(p.codiProd)) {
                         updateProductImageUI(p.codiProd, imgContainer, imageCache.get(p.codiProd));
                     } else {
-                        // Si no, observar para lazy loading
                         imageObserver.observe(imgContainer);
                     }
                 }
-                // Los productos sin imagenId ya muestran el icono por defecto
             });
         }
 
-        // Modificar la función updateProductImage para usar el nuevo sistema
         async function updateProductImage(productId) {
-            // Limpiar caché para forzar recarga
             imageCache.delete(productId);
             cancelImageLoad(productId);
             
-            // Buscar el contenedor de imagen
             const container = document.getElementById(`img-container-${productId}`);
             if (!container) return;
             
-            // Mostrar placeholder de carga
             container.innerHTML = `
                 <div class="image-placeholder image-loading">
                     <div class="loading-spinner"></div>
@@ -1006,7 +693,6 @@
                 </div>
             `;
             
-            // Cargar nueva imagen
             await loadProductImage(productId, container);
         }
 
@@ -1025,6 +711,7 @@
             if (id) {
                 const product = productos.find(p => p.codiProd === id);
                 document.getElementById('modalTitle').textContent = 'Editar Producto';
+                document.getElementById('modalIcon').textContent = 'edit';
                 document.getElementById('productId').value = product.codiProd;
                 document.getElementById('productVersion').value = product.version;
                 document.getElementById('productName').value = product.nombProd;
@@ -1032,6 +719,7 @@
                 document.getElementById('productStock').value = product.stocProd;
             } else {
                 document.getElementById('modalTitle').textContent = 'Nuevo Producto';
+                document.getElementById('modalIcon').textContent = 'add_box';
                 document.getElementById('productId').value = '';
                 document.getElementById('productVersion').value = '';
             }
@@ -1187,7 +875,6 @@
                 if (response.ok) {
                     showAlert('Imagen subida exitosamente', 'success');
                     
-                    // Recargar datos del producto actualizado desde el servidor
                     const productResponse = await fetch(`${API_URL}/productos/${productIdToUpdate}`, {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
@@ -1195,19 +882,16 @@
                     if (productResponse.ok) {
                         const updatedProduct = await productResponse.json();
                         
-                        // Actualizar el producto en el array local
                         const productIndex = productos.findIndex(p => p.codiProd === productIdToUpdate);
                         if (productIndex !== -1) {
                             productos[productIndex] = updatedProduct;
                         }
                         
-                        // Ahora actualizar la imagen en la UI
                         await updateProductImage(productIdToUpdate);
                     } else {
                         showAlert('Imagen subida pero no se pudo actualizar la vista. Recarga la página.', 'warning');
                     }
                     
-                    // Cerrar modal y resetear después de completar todo
                     closeImageModal();
                     currentProductId = null;
                 } else {
@@ -1229,13 +913,12 @@
         }
 
         document.addEventListener('click', function(event) {
-            const menu = document.getElementById('navbarMenu');
-            const hamburger = document.querySelector('.hamburger');
-            const navbar = document.querySelector('.navbar');
+            const sidebar = document.querySelector('.sidebar');
+            const toggle = document.querySelector('.sidebar-toggle');
             
-            if (!navbar.contains(event.target) && menu.classList.contains('active')) {
-                menu.classList.remove('active');
-                hamburger.classList.remove('active');
+            if (!sidebar.contains(event.target) && !toggle.contains(event.target) && window.innerWidth <= 768) {
+                sidebar.classList.remove('active');
+                document.getElementById('mainContent').classList.remove('sidebar-hidden');
             }
         });
 
@@ -1247,16 +930,11 @@
             }
         });
 
-        // Limpiar recursos cuando se cierra la página
         window.addEventListener('beforeunload', () => {
-            // Cancelar todas las peticiones pendientes
             imageControllers.forEach(controller => controller.abort());
-            
-            // Liberar URLs de objetos blob
             imageCache.forEach(url => URL.revokeObjectURL(url));
         });
 
-        // Inicializar cuando se carga la página
         if (checkAuth()) {
             loadProductos();
         }

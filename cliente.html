@@ -4,196 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clientes - Team3System</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f0f4f8;
-        }
-
-        .navbar {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            color: white;
-            padding: 0 16px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .navbar-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 64px;
-            gap: 16px;
-        }
-
-        .navbar-brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 20px;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .navbar-menu {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex: 1;
-        }
-
-        .nav-item {
-            padding: 8px 16px;
-            border-radius: 8px;
-            text-decoration: none;
-            color: #cbd5e1;
-            font-weight: 500;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-        }
-
-        .nav-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-
-        .nav-item.active {
-            background: rgba(59, 130, 246, 0.15);
-            color: #60a5fa;
-        }
-
-        .btn-logout {
-            padding: 8px 16px;
-            background: rgba(239, 68, 68, 0.1);
-            border: 2px solid rgba(239, 68, 68, 0.3);
-            color: #f87171;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            transition: all 0.3s ease;
-            margin-left: auto;
-        }
-
-        .btn-logout:hover {
-            background: #dc2626;
-            border-color: #dc2626;
-            color: white;
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 4px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-            margin-left: auto;
-        }
-
-        .hamburger span {
-            width: 24px;
-            height: 3px;
-            background: white;
-            border-radius: 2px;
-            transition: all 0.3s ease;
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(6px, 6px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(6px, -6px);
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 32px auto;
-            padding: 0 16px;
-        }
-
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 28px;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-
-        .page-header h1 {
-            color: #0f172a;
-            font-size: 32px;
-            font-weight: 700;
-        }
-
-        .btn-primary {
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
-            font-size: 14px;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-
         .search-bar {
-            background: #FFFFFF;
+            background: #1a1a1a;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            border: 1px solid #333;
             margin-bottom: 20px;
         }
 
-        .search-bar input {
-            width: 100%;
-            padding: 12px 14px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 14px;
-            color: #0f172a;
-            background: #f8fafc;
-            transition: all 0.3s ease;
-        }
-
-        .search-bar input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
         .table-container {
-            background: #FFFFFF;
+            background: #1a1a1a;
             border-radius: 10px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            border: 1px solid #333;
             overflow: hidden;
         }
 
@@ -203,7 +30,7 @@
         }
 
         thead {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            background: #2a2a2a;
             color: white;
         }
 
@@ -214,20 +41,21 @@
             font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            border-bottom: 1px solid #333;
         }
 
         tbody tr {
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #333;
             transition: background 0.2s ease;
         }
 
         tbody tr:hover {
-            background: #f8fafc;
+            background: #2a2a2a;
         }
 
         tbody td {
             padding: 16px;
-            color: #0f172a;
+            color: #ffffff;
             font-size: 14px;
         }
 
@@ -240,45 +68,7 @@
             font-weight: 600;
         }
 
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .btn-edit, .btn-delete {
-            padding: 8px 14px;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 12px;
-        }
-
-        .btn-edit {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            color: white;
-            box-shadow: 0 1px 4px rgba(59, 130, 246, 0.2);
-        }
-
-        .btn-edit:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
-        }
-
-        .btn-delete {
-            background: #dc2626;
-            color: white;
-            box-shadow: 0 1px 4px rgba(220, 38, 38, 0.2);
-        }
-
-        .btn-delete:hover {
-            background: #b91c1c;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 6px rgba(220, 38, 38, 0.3);
-        }
-
+        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -286,7 +76,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.8);
             z-index: 2000;
             align-items: center;
             justify-content: center;
@@ -299,12 +89,13 @@
         }
 
         .modal-content {
-            background: #FFFFFF;
+            background: #1a1a1a;
             padding: 28px;
             border-radius: 12px;
             max-width: 480px;
             width: 100%;
-            box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.8);
+            border: 1px solid #333;
         }
 
         .modal-header {
@@ -315,20 +106,23 @@
         }
 
         .modal-header h2 {
-            color: #0f172a;
+            color: #ffffff;
             font-size: 22px;
             font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .btn-close {
-            background: #f1f5f9;
+            background: #333333;
             border: none;
             width: 32px;
             height: 32px;
             border-radius: 6px;
             font-size: 22px;
             cursor: pointer;
-            color: #64748b;
+            color: #cccccc;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
@@ -336,38 +130,8 @@
         }
 
         .btn-close:hover {
-            background: #e2e8f0;
-            color: #0f172a;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            color: #1e293b;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 13px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px 14px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 14px;
-            color: #0f172a;
-            background: #f8fafc;
-            transition: all 0.3s ease;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            background: #444444;
+            color: #ffffff;
         }
 
         .form-actions {
@@ -378,8 +142,8 @@
         .btn-cancel {
             flex: 1;
             padding: 12px;
-            background: #f1f5f9;
-            color: #475569;
+            background: #333333;
+            color: #cccccc;
             border: none;
             border-radius: 8px;
             font-weight: 600;
@@ -389,127 +153,31 @@
         }
 
         .btn-cancel:hover {
-            background: #e2e8f0;
-            color: #1e293b;
+            background: #444444;
+            color: #ffffff;
         }
 
         .btn-save {
             flex: 1;
             padding: 12px;
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            background: #3b82f6;
             color: white;
             border: none;
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
             transition: all 0.3s ease;
             font-size: 14px;
         }
 
         .btn-save:hover {
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-
-        .alert {
-            padding: 12px 14px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-weight: 500;
-            font-size: 13px;
-            display: flex;
-            gap: 8px;
-            align-items: flex-start;
-        }
-
-        .alert-success {
-            background: #d1fae5;
-            color: #065f46;
-            border-left: 4px solid #10b981;
-        }
-
-        .alert-error {
-            background: #fee2e2;
-            color: #991b1b;
-            border-left: 4px solid #dc2626;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 32px;
-            color: #64748b;
-        }
-
-        .no-clientes {
-            text-align: center;
-            padding: 48px 20px;
-            color: #64748b;
-        }
-
-        .no-clientes h3 {
-            font-size: 20px;
-            margin-bottom: 8px;
-            color: #1e293b;
-            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+            background: #2563eb;
         }
 
         @media (max-width: 768px) {
-            .hamburger {
-                display: flex;
-            }
-
-            .navbar-container {
-                height: 56px;
-            }
-
-            .navbar-menu {
-                position: fixed;
-                top: 56px;
-                left: 0;
-                right: 0;
-                background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-                flex-direction: column;
-                padding: 16px;
-                gap: 4px;
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            }
-
-            .navbar-menu.active {
-                transform: translateX(0);
-            }
-
-            .nav-item {
-                width: 100%;
-                padding: 12px 16px;
-                text-align: left;
-            }
-
-            .btn-logout {
-                margin-left: 0;
-                width: 100%;
-                margin-top: 8px;
-            }
-
-            .page-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .page-header h1 {
-                font-size: 24px;
-            }
-
-            .btn-primary {
-                width: 100%;
-            }
-
-            .container {
-                padding: 0 12px;
-            }
-
             .table-container {
                 overflow-x: auto;
             }
@@ -536,9 +204,9 @@
                 gap: 12px;
                 padding: 16px;
                 margin-bottom: 12px;
-                background: white;
+                background: #1a1a1a;
                 border-radius: 8px;
-                border: 1px solid #e2e8f0;
+                border: 1px solid #333;
             }
 
             tbody td {
@@ -571,14 +239,6 @@
         }
 
         @media (max-width: 480px) {
-            .navbar-brand {
-                font-size: 16px;
-            }
-
-            .page-header h1 {
-                font-size: 20px;
-            }
-
             .modal-content {
                 padding: 20px;
             }
@@ -590,61 +250,86 @@
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="navbar-container">
-            <div class="navbar-brand">
-                <span>🗄️</span>
-                <span>Team3System</span>
-            </div>
-            <button class="hamburger" onclick="toggleMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <span class="material-icons">inventory_2</span>
+            <span class="sidebar-brand">Team3System</span>
+        </div>
+        <div class="sidebar-menu">
+            <a href="dashboard.html" class="nav-item">
+                <span class="material-icons">dashboard</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="producto.html" class="nav-item">
+                <span class="material-icons">inventory</span>
+                <span>Productos</span>
+            </a>
+            <a href="cliente.html" class="nav-item active">
+                <span class="material-icons">people</span>
+                <span>Clientes</span>
+            </a>
+        </div>
+        <div class="sidebar-footer">
+            <button class="btn-logout" onclick="logout()">
+                <span class="material-icons">logout</span>
+                <span>Cerrar Sesión</span>
             </button>
-            <div class="navbar-menu" id="navbarMenu">
-                <a href="dashboard.html" class="nav-item">Dashboard</a>
-                <a href="producto.html" class="nav-item">Productos</a>
-                <a href="cliente.html" class="nav-item active">Clientes</a>
-                <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
-            </div>
         </div>
     </nav>
 
-    <div class="container">
-        <div class="page-header">
-            <h1>👥 Clientes</h1>
-            <button class="btn-primary" onclick="openModal()">+ Nuevo Cliente</button>
-        </div>
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <button class="sidebar-toggle" onclick="toggleSidebar()">
+            <span class="material-icons">menu</span>
+        </button>
 
-        <div id="alertContainer"></div>
+        <div class="container">
+            <div class="page-header">
+                <h1>
+                    <span class="material-icons">people</span>
+                    Clientes
+                </h1>
+                <button class="btn-primary" onclick="openModal()">
+                    <span class="material-icons">add</span>
+                    Nuevo Cliente
+                </button>
+            </div>
 
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="🔍 Buscar clientes..." 
-                   onkeyup="filterClientes()">
-        </div>
+            <div id="alertContainer"></div>
 
-        <div class="table-container">
-            <table id="clientesTable">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre del Cliente</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="clientesBody">
-                    <tr>
-                        <td colspan="3" class="loading">Cargando clientes...</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="🔍 Buscar clientes..." 
+                       onkeyup="filterClientes()">
+            </div>
+
+            <div class="table-container">
+                <table id="clientesTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre del Cliente</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientesBody">
+                        <tr>
+                            <td colspan="3" class="loading">Cargando clientes...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
+    <!-- Client Modal -->
     <div id="clienteModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modalTitle">Nuevo Cliente</h2>
+                <h2>
+                    <span class="material-icons" id="modalIcon">person_add</span>
+                    <span id="modalTitle">Nuevo Cliente</span>
+                </h2>
                 <button class="btn-close" onclick="closeModal()">&times;</button>
             </div>
             <form id="clienteForm">
@@ -656,7 +341,10 @@
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn-cancel" onclick="closeModal()">Cancelar</button>
-                    <button type="submit" class="btn-save">Guardar</button>
+                    <button type="submit" class="btn-save">
+                        <span class="material-icons">save</span>
+                        Guardar
+                    </button>
                 </div>
             </form>
         </div>
@@ -666,11 +354,11 @@
         const API_URL = 'https://backend.tpdteam3.com/backend/api';
         let clientes = [];
 
-        function toggleMenu() {
-            const menu = document.getElementById('navbarMenu');
-            const hamburger = document.querySelector('.hamburger');
-            menu.classList.toggle('active');
-            hamburger.classList.toggle('active');
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const mainContent = document.getElementById('mainContent');
+            sidebar.classList.toggle('active');
+            mainContent.classList.toggle('sidebar-hidden');
         }
 
         function checkAuth() {
@@ -725,7 +413,7 @@
             if (clients.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="3" class="no-clientes">
+                        <td colspan="3" class="no-data">
                             <h3>No hay clientes registrados</h3>
                             <p>Agrega tu primer cliente usando el botón "Nuevo Cliente"</p>
                         </td>
@@ -741,10 +429,12 @@
                     <td>
                         <div class="action-buttons">
                             <button class="btn-edit" onclick="editCliente(${c.codiClie})">
-                                ✏️ Editar
+                                <span class="material-icons">edit</span>
+                                Editar
                             </button>
                             <button class="btn-delete" onclick="deleteCliente(${c.codiClie})">
-                                🗑️ Eliminar
+                                <span class="material-icons">delete</span>
+                                Eliminar
                             </button>
                         </div>
                     </td>
@@ -768,10 +458,12 @@
             if (id) {
                 const cliente = clientes.find(c => c.codiClie === id);
                 document.getElementById('modalTitle').textContent = 'Editar Cliente';
+                document.getElementById('modalIcon').textContent = 'edit';
                 document.getElementById('clienteId').value = cliente.codiClie;
                 document.getElementById('clienteName').value = cliente.nombClie;
             } else {
                 document.getElementById('modalTitle').textContent = 'Nuevo Cliente';
+                document.getElementById('modalIcon').textContent = 'person_add';
                 document.getElementById('clienteId').value = '';
             }
         }
@@ -849,13 +541,12 @@
         }
 
         document.addEventListener('click', function(event) {
-            const menu = document.getElementById('navbarMenu');
-            const hamburger = document.querySelector('.hamburger');
-            const navbar = document.querySelector('.navbar');
+            const sidebar = document.querySelector('.sidebar');
+            const toggle = document.querySelector('.sidebar-toggle');
             
-            if (!navbar.contains(event.target) && menu.classList.contains('active')) {
-                menu.classList.remove('active');
-                hamburger.classList.remove('active');
+            if (!sidebar.contains(event.target) && !toggle.contains(event.target) && window.innerWidth <= 768) {
+                sidebar.classList.remove('active');
+                document.getElementById('mainContent').classList.remove('sidebar-hidden');
             }
         });
 
