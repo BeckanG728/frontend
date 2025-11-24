@@ -425,3 +425,199 @@ input:focus-visible {
   background: #3b82f6;
   color: #fff;
 }
+
+
+/* ===========================
+   ESTILOS BASE
+=========================== */
+
+body {
+    background: #121212;
+    color: #fff;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* ============================================================
+   SIDEBAR NUEVO CON EFECTO COLAPSABLE PROFESIONAL
+   Copia EXACTA del comportamiento del ejemplo enviado
+   Adaptado al estilo oscuro de Team3System
+   ============================================================ */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100%;
+    background: #1a1a1a;
+    border-right: 1px solid #333;
+    transition: width 0.3s ease;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.sidebar.collapsed {
+    width: 70px;
+}
+
+/* HEADER */
+.sidebar-header {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    border-bottom: 1px solid #333;
+}
+
+.sidebar-header .material-icons {
+    font-size: 26px;
+}
+
+.sidebar-brand {
+    font-size: 18px;
+    font-weight: 700;
+    transition: opacity 0.25s ease;
+}
+
+.sidebar.collapsed .sidebar-brand {
+    opacity: 0;
+}
+
+/* MENU */
+.sidebar-menu {
+    padding-top: 12px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 22px;
+    color: #ddd;
+    border-left: 4px solid transparent;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.25s ease;
+    overflow: hidden;
+}
+
+.nav-item:hover {
+    background: #2a2a2a;
+    border-color: #3b82f6;
+}
+
+.nav-item.active {
+    background: #2a2a2a;
+    border-color: #F19E39;
+}
+
+.nav-item span:last-child {
+    transition: opacity 0.2s ease;
+}
+
+.sidebar.collapsed .nav-item span:last-child {
+    opacity: 0;
+}
+
+/* FOOTER USER SECTION */
+.sidebar-footer {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    padding: 0 20px;
+}
+
+.sidebar.collapsed .user-details,
+.sidebar.collapsed .user-label,
+.sidebar.collapsed .user-name {
+    display: none;
+}
+
+/* TOOLTIP */
+.nav-item[data-tooltip] {
+    position: relative;
+}
+
+.sidebar.collapsed .nav-item[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.9);
+    padding: 6px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    color: #fff;
+    opacity: 1;
+    margin-left: 10px;
+    z-index: 2000;
+}
+
+/* MAIN CONTENT SHIFT */
+.main-content {
+    margin-left: 250px;
+    transition: margin-left .3s ease;
+}
+
+.main-content.sidebar-collapsed {
+    margin-left: 70px;
+}
+
+/* Toggle button */
+.sidebar.collapsed + .main-content .sidebar-toggle {
+    left: 70px !important;
+}
+
+.sidebar-collapse-btn {
+    position: absolute;
+    right: 14px;
+    top: 18px;
+    background: transparent;
+    border: none;
+    color: #ccc;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    transition: transform 0.3s ease, background 0.2s ease;
+}
+
+.sidebar-collapse-btn:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.sidebar.collapsed .sidebar-collapse-btn {
+    transform: rotate(180deg);
+}
+
+
+/* LOGO QUE SE OCULTA AL COLAPSAR */
+.sidebar-logo {
+    font-size: 26px;
+    transition: opacity .25s ease;
+}
+
+.sidebar.collapsed .sidebar-logo {
+    opacity: 0;
+}
+
+/* BOTÓN INTERNO */
+.sidebar-collapse-btn {
+    position: absolute;
+    right: 14px;
+    top: 18px;
+    background: transparent;
+    border: none;
+    color: #ccc;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    transition: background .2s ease;
+}
+
+.sidebar-collapse-btn:hover {
+    background: rgba(255,255,255,0.1);
+}
