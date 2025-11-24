@@ -1,42 +1,98 @@
-<!-- views/cliente.html - contenido puro -->
+<!-- ============================================
+     CLIENTES VIEW
+     Gestión de clientes
+============================================ -->
+
+<!-- Encabezado de página -->
 <div class="page-header">
-  <h1><span class="material-icons">people</span>Clientes</h1>
-  <button class="btn-primary" id="btnNewClient"><span class="material-icons">add</span>Nuevo Cliente</button>
+  <h1>
+    <span class="material-icons" aria-hidden="true">people</span>
+    Clientes
+  </h1>
+  <button class="btn-primary" id="btnNewClient" aria-label="Crear nuevo cliente">
+    <span class="material-icons" aria-hidden="true">add</span>
+    Nuevo Cliente
+  </button>
 </div>
 
-<div id="alertContainer"></div>
+<!-- Contenedor de alertas -->
+<div id="alertContainer" role="alert" aria-live="polite"></div>
 
+<!-- Barra de búsqueda -->
 <div class="search-bar">
-  <input type="text" id="searchInput" placeholder="🔍 Buscar clientes..." aria-label="Buscar clientes">
+  <input 
+    type="text" 
+    id="searchInput" 
+    placeholder="🔍 Buscar clientes por nombre o ID..." 
+    aria-label="Buscar clientes"
+    autocomplete="off"
+  />
 </div>
 
-<div class="table-container">
+<!-- Tabla de clientes -->
+<section class="table-container" aria-label="Lista de clientes">
   <table id="clientesTable">
     <thead>
-      <tr><th>ID</th><th>Nombre del Cliente</th><th>Acciones</th></tr>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Nombre del Cliente</th>
+        <th scope="col">Acciones</th>
+      </tr>
     </thead>
     <tbody id="clientesBody">
-      <tr><td colspan="3" class="loading">Cargando clientes...</td></tr>
+      <tr>
+        <td colspan="3" class="loading">Cargando clientes...</td>
+      </tr>
     </tbody>
   </table>
-</div>
+</section>
 
-<!-- Client Modal -->
-<div id="clienteModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+<!-- ============================================
+     MODAL: CLIENTE (Crear/Editar)
+============================================ -->
+<div id="clienteModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
   <div class="modal-content">
+    <!-- Header del modal -->
     <div class="modal-header">
-      <h2 id="modalTitle"><span class="material-icons" id="modalIcon">person_add</span><span id="modalTitleText">Nuevo Cliente</span></h2>
-      <button class="btn-close" id="clienteModalClose">&times;</button>
+      <h2 id="modalTitle">
+        <span class="material-icons" id="modalIcon" aria-hidden="true">person_add</span>
+        <span id="modalTitleText">Nuevo Cliente</span>
+      </h2>
+      <button class="btn-close" id="clienteModalClose" aria-label="Cerrar modal">&times;</button>
     </div>
-    <form id="clienteForm">
-      <input type="hidden" id="clienteId">
+
+    <!-- Formulario -->
+    <form id="clienteForm" novalidate>
+      <input type="hidden" id="clienteId" />
+
+      <!-- Campo: Nombre -->
       <div class="form-group">
-        <label for="clienteName">Nombre del Cliente *</label>
-        <input type="text" id="clienteName" required placeholder="Ingrese el nombre completo">
+        <label for="clienteName">
+          Nombre del Cliente <span style="color: #dc2626;">*</span>
+        </label>
+        <input 
+          type="text" 
+          id="clienteName" 
+          name="clienteName"
+          required 
+          placeholder="Ingrese el nombre completo"
+          autocomplete="off"
+          maxlength="100"
+        />
+        <small style="color: #999; display: block; margin-top: 8px;">
+          Nombre completo del cliente o razón social
+        </small>
       </div>
+
+      <!-- Acciones del formulario -->
       <div class="form-actions">
-        <button type="button" class="btn-cancel" id="clienteFormCancel">Cancelar</button>
-        <button type="submit" class="btn-save"><span class="material-icons">save</span>Guardar</button>
+        <button type="button" class="btn-cancel" id="clienteFormCancel">
+          Cancelar
+        </button>
+        <button type="submit" class="btn-save">
+          <span class="material-icons" aria-hidden="true">save</span>
+          Guardar
+        </button>
       </div>
     </form>
   </div>

@@ -1,41 +1,66 @@
-<!-- views/dashboard.html - contenido puro -->
+<!-- ============================================
+     DASHBOARD VIEW
+     Vista principal con estadísticas del sistema
+============================================ -->
+
+<!-- Encabezado de página -->
 <div class="page-header">
   <div>
     <h1>
-      <span class="material-icons">dashboard</span>
+      <span class="material-icons" aria-hidden="true">dashboard</span>
       Dashboard
     </h1>
     <p style="color: #cccccc; margin-top: 8px;">Resumen del sistema de gestión</p>
   </div>
 </div>
 
-<div class="stats-grid" id="statsGrid">
-  <div class="stat-card">
-    <div class="stat-icon"><span class="material-icons">inventory</span></div>
+<!-- Grid de estadísticas -->
+<section class="stats-grid" id="statsGrid" aria-label="Estadísticas del sistema">
+  <!-- Tarjeta: Total Productos -->
+  <article class="stat-card">
+    <div class="stat-icon">
+      <span class="material-icons" aria-hidden="true">inventory</span>
+    </div>
     <div class="stat-label">Total Productos</div>
-    <div class="stat-value" id="totalProductos">0</div>
+    <div class="stat-value" id="totalProductos" aria-live="polite">0</div>
     <div class="stat-change">Sistema actualizado</div>
-  </div>
+  </article>
 
-  <div class="stat-card">
-    <div class="stat-icon"><span class="material-icons">people</span></div>
+  <!-- Tarjeta: Total Clientes -->
+  <article class="stat-card">
+    <div class="stat-icon">
+      <span class="material-icons" aria-hidden="true">people</span>
+    </div>
     <div class="stat-label">Total Clientes</div>
-    <div class="stat-value" id="totalClientes">0</div>
+    <div class="stat-value" id="totalClientes" aria-live="polite">0</div>
     <div class="stat-change">Base de datos sincronizada</div>
-  </div>
+  </article>
 
-  <div class="stat-card">
-    <div class="stat-icon"><span class="material-icons">image</span></div>
+  <!-- Tarjeta: Productos con Imagen -->
+  <article class="stat-card">
+    <div class="stat-icon">
+      <span class="material-icons" aria-hidden="true">image</span>
+    </div>
     <div class="stat-label">Productos con Imagen</div>
-    <div class="stat-value" id="productosConImagen">0</div>
+    <div class="stat-value" id="productosConImagen" aria-live="polite">0</div>
     <div class="stat-change">Almacenamiento disponible</div>
-  </div>
-</div>
+  </article>
+</section>
 
-<div class="quick-actions">
-  <h2><span class="material-icons">flash_on</span>Acciones Rápidas</h2>
+<!-- Acciones rápidas -->
+<section class="quick-actions" aria-label="Acciones rápidas">
+  <h2>
+    <span class="material-icons" aria-hidden="true">flash_on</span>
+    Acciones Rápidas
+  </h2>
   <div class="actions-grid">
-    <a href="#producto" class="action-btn"><span class="material-icons">inventory</span><span>Productos</span></a>
-    <a href="#cliente" class="action-btn"><span class="material-icons">people</span><span>Clientes</span></a>
+    <a href="#producto" class="action-btn" aria-label="Ir a gestión de productos">
+      <span class="material-icons" aria-hidden="true">inventory</span>
+      <span>Productos</span>
+    </a>
+    <a href="#cliente" class="action-btn" aria-label="Ir a gestión de clientes">
+      <span class="material-icons" aria-hidden="true">people</span>
+      <span>Clientes</span>
+    </a>
   </div>
-</div>
+</section>

@@ -1,66 +1,164 @@
-<!-- views/producto.html - contenido puro -->
+<!-- ============================================
+     PRODUCTOS VIEW
+     Gestión de productos del inventario
+============================================ -->
+
+<!-- Encabezado de página -->
 <div class="page-header">
-  <h1><span class="material-icons">inventory</span>Productos</h1>
-  <button class="btn-primary" id="btnNewProduct">
-    <span class="material-icons">add</span>Nuevo Producto
+  <h1>
+    <span class="material-icons" aria-hidden="true">inventory</span>
+    Productos
+  </h1>
+  <button class="btn-primary" id="btnNewProduct" aria-label="Crear nuevo producto">
+    <span class="material-icons" aria-hidden="true">add</span>
+    Nuevo Producto
   </button>
 </div>
 
-<div id="alertContainer"></div>
+<!-- Contenedor de alertas -->
+<div id="alertContainer" role="alert" aria-live="polite"></div>
 
+<!-- Barra de búsqueda -->
 <div class="search-bar">
-  <input type="text" id="searchInput" placeholder="🔍 Buscar productos..." aria-label="Buscar productos">
+  <input 
+    type="text" 
+    id="searchInput" 
+    placeholder="🔍 Buscar productos por nombre..." 
+    aria-label="Buscar productos"
+    autocomplete="off"
+  />
 </div>
 
-<div id="productsContainer" class="products-grid">
+<!-- Grid de productos -->
+<section id="productsContainer" class="products-grid" aria-label="Lista de productos">
   <div class="loading">Cargando productos...</div>
-</div>
+</section>
 
-<!-- Product Modal (markup included as fragment so product.js can hook to it) -->
-<div id="productModal" class="modal" aria-hidden="true">
+<!-- ============================================
+     MODAL: PRODUCTO (Crear/Editar)
+============================================ -->
+<div id="productModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
   <div class="modal-content">
+    <!-- Header del modal -->
     <div class="modal-header">
-      <h2><span class="material-icons" id="modalIcon">add_box</span><span id="modalTitle">Nuevo Producto</span></h2>
-      <button class="btn-close" id="productModalClose">&times;</button>
+      <h2 id="modalTitle">
+        <span class="material-icons" id="modalIcon" aria-hidden="true">add_box</span>
+        <span>Nuevo Producto</span>
+      </h2>
+      <button class="btn-close" id="productModalClose" aria-label="Cerrar modal">&times;</button>
     </div>
-    <form id="productForm">
-      <input type="hidden" id="productId">
-      <input type="hidden" id="productVersion">
+
+    <!-- Formulario -->
+    <form id="productForm" novalidate>
+      <input type="hidden" id="productId" />
+      <input type="hidden" id="productVersion" />
+
+      <!-- Campo: Nombre -->
       <div class="form-group">
-        <label>Nombre del Producto *</label>
-        <input type="text" id="productName" required placeholder="Ej: Laptop HP 15">
+        <label for="productName">
+          Nombre del Producto <span style="color: #dc2626;">*</span>
+        </label>
+        <input 
+          type="text" 
+          id="productName" 
+          name="productName"
+          required 
+          placeholder="Ej: Laptop HP 15"
+          autocomplete="off"
+          maxlength="100"
+        />
       </div>
+
+      <!-- Campo: Precio -->
       <div class="form-group">
-        <label>Precio (S/) *</label>
-        <input type="number" id="productPrice" step="0.01" min="0" required placeholder="0.00">
+        <label for="productPrice">
+          Precio (S/) <span style="color: #dc2626;">*</span>
+        </label>
+        <input 
+          type="number" 
+          id="productPrice" 
+          name="productPrice"
+          step="0.01" 
+          min="0" 
+          required 
+          placeholder="0.00"
+          autocomplete="off"
+        />
       </div>
+
+      <!-- Campo: Stock -->
       <div class="form-group">
-        <label>Stock *</label>
-        <input type="number" id="productStock" step="1" min="0" required placeholder="0">
+        <label for="productStock">
+          Stock <span style="color: #dc2626;">*</span>
+        </label>
+        <input 
+          type="number" 
+          id="productStock" 
+          name="productStock"
+          step="1" 
+          min="0" 
+          required 
+          placeholder="0"
+          autocomplete="off"
+        />
       </div>
+
+      <!-- Acciones del formulario -->
       <div class="form-actions">
-        <button type="button" class="btn-cancel" id="productFormCancel">Cancelar</button>
-        <button type="submit" class="btn-save"><span class="material-icons">save</span>Guardar</button>
+        <button type="button" class="btn-cancel" id="productFormCancel">
+          Cancelar
+        </button>
+        <button type="submit" class="btn-save">
+          <span class="material-icons" aria-hidden="true">save</span>
+          Guardar
+        </button>
       </div>
     </form>
   </div>
 </div>
 
-<!-- Image Modal -->
-<div id="imageModal" class="modal" aria-hidden="true">
+<!-- ============================================
+     MODAL: IMAGEN
+============================================ -->
+<div id="imageModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="imageModalTitle" aria-hidden="true">
   <div class="modal-content">
+    <!-- Header del modal -->
     <div class="modal-header">
-      <h2><span class="material-icons">image</span>Subir Imagen</h2>
-      <button class="btn-close" id="imageModalClose">&times;</button>
+      <h2 id="imageModalTitle">
+        <span class="material-icons" aria-hidden="true">image</span>
+        <span>Subir Imagen</span>
+      </h2>
+      <button class="btn-close" id="imageModalClose" aria-label="Cerrar modal">&times;</button>
     </div>
-    <form id="imageForm">
+
+    <!-- Formulario -->
+    <form id="imageForm" novalidate>
+      <!-- Campo: Archivo de imagen -->
       <div class="form-group">
-        <label>Seleccionar Imagen</label>
-        <input type="file" id="imageFile" accept="image/*" required>
+        <label for="imageFile">
+          Seleccionar Imagen <span style="color: #dc2626;">*</span>
+        </label>
+        <input 
+          type="file" 
+          id="imageFile" 
+          name="imageFile"
+          accept="image/*" 
+          required
+        />
+        <small style="color: #999; display: block; margin-top: 8px;">
+          Formatos permitidos: JPG, PNG, GIF. Tamaño máximo: 5MB
+        </small>
       </div>
+
+      <!-- Acciones del formulario -->
       <div class="form-actions">
-        <button type="button" class="btn-cancel" id="imageFormCancel">Cancelar</button>
-        <button type="submit" class="btn-save"><span class="material-icons">upload</span>Subir Imagen</button>
+        <button type="button" class="btn-cancel" id="imageFormCancel">
+          Cancelar
+        </button>
+        <button type="submit" class="btn-save">
+          <span class="material-icons" aria-hidden="true">upload</span>
+          Subir Imagen
+        </button>
       </div>
     </form>
   </div>

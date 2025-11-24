@@ -3,59 +3,69 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description" content="Sistema de Gestión de Inventario - Team3System" />
     <title>Team3System — App</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-    <link rel="stylesheet" href="styles.css" />
+    <!-- Los estilos base.css y sidebar.css se cargan dinámicamente desde app.js -->
   </head>
   <body>
 
-    <!-- SIDEBAR -->
-    <nav class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-        <!-- Ícono/logo que desaparece al colapsar -->
-        <span class="material-icons sidebar-logo" id="sidebarLogo">inventory_2</span>
-
-        <!-- Nombre del sistema -->
+    <!-- ============================================
+         SIDEBAR NAVIGATION
+    ============================================ -->
+    <nav class="sidebar" id="sidebar" role="navigation" aria-label="Navegación principal">
+      <!-- Header con logo y marca -->
+      <div class="sidebar-header">
+        <span class="material-icons sidebar-logo" id="sidebarLogo" aria-hidden="true">inventory_2</span>
         <span class="sidebar-brand">Team3System</span>
-
-        <!-- Botón interno para colapsar / expandir -->
-        <button class="sidebar-collapse-btn" id="sidebarToggle">
-            <span class="material-icons" id="sidebarToggleIcon">left_panel_close</span>
+        <button class="sidebar-collapse-btn" id="sidebarToggle" aria-label="Colapsar/Expandir menú" title="Colapsar menú">
+          <span class="material-icons" id="sidebarToggleIcon">chevron_left</span>
         </button>
-</div>
+      </div>
 
+      <!-- Menú de navegación -->
       <div class="sidebar-menu" id="sidebarMenu">
-        <a href="#dashboard" class="nav-item" data-view="dashboard" data-tooltip="Dashboard">
-          <span class="material-icons">dashboard</span><span>Dashboard</span>
+        <a href="#dashboard" class="nav-item" data-view="dashboard" data-tooltip="Dashboard" aria-label="Ir a Dashboard">
+          <span class="material-icons" aria-hidden="true">dashboard</span>
+          <span>Dashboard</span>
         </a>
-        <a href="#producto" class="nav-item" data-view="producto" data-tooltip="Productos">
-          <span class="material-icons">inventory</span><span>Productos</span>
+        <a href="#producto" class="nav-item" data-view="producto" data-tooltip="Productos" aria-label="Ir a Productos">
+          <span class="material-icons" aria-hidden="true">inventory</span>
+          <span>Productos</span>
         </a>
-        <a href="#cliente" class="nav-item" data-view="cliente" data-tooltip="Clientes">
-          <span class="material-icons">people</span><span>Clientes</span>
+        <a href="#cliente" class="nav-item" data-view="cliente" data-tooltip="Clientes" aria-label="Ir a Clientes">
+          <span class="material-icons" aria-hidden="true">people</span>
+          <span>Clientes</span>
         </a>
       </div>
 
+      <!-- Footer con información de usuario -->
       <div class="sidebar-footer">
-        <div class="user-info">
-          <div class="user-avatar" id="userAvatar">U</div>
+        <div class="user-info" role="complementary" aria-label="Información del usuario">
+          <div class="user-avatar" id="userAvatar" aria-hidden="true">U</div>
           <div class="user-details">
             <div class="user-label">Usuario activo</div>
             <div class="user-name" id="userName">Cargando...</div>
           </div>
         </div>
 
-        <button class="btn-logout" id="btnLogout">
-          <span class="material-icons">logout</span><span>Cerrar Sesión</span>
+        <button class="btn-logout" id="btnLogout" aria-label="Cerrar sesión">
+          <span class="material-icons" aria-hidden="true">logout</span>
+          <span>Cerrar Sesión</span>
         </button>
       </div>
     </nav>
 
-    <!-- MAIN CONTENT -->
+    <!-- ============================================
+         MAIN CONTENT AREA
+    ============================================ -->
     <div class="main-content" id="mainContent">
-      <main id="view" class="container" tabindex="-1"></main>
+      <main id="view" class="container" tabindex="-1" role="main">
+        <!-- El contenido dinámico se carga aquí -->
+      </main>
     </div>
 
+    <!-- Scripts -->
     <script type="module" src="scripts/app.js"></script>
   </body>
 </html>
