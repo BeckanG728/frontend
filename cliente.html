@@ -49,6 +49,10 @@
             transition: background 0.2s ease;
         }
 
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
         tbody tr:hover {
             background: #2a2a2a;
         }
@@ -96,6 +100,18 @@
             width: 100%;
             box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.8);
             border: 1px solid #333;
+            animation: modalSlide 0.3s ease;
+        }
+
+        @keyframes modalSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .modal-header {
@@ -112,6 +128,10 @@
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+
+        .modal-header h2 .material-icons {
+            color: #F19E39;
         }
 
         .btn-close {
@@ -137,6 +157,7 @@
         .form-actions {
             display: flex;
             gap: 10px;
+            margin-top: 24px;
         }
 
         .btn-cancel {
@@ -169,6 +190,10 @@
             box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
             transition: all 0.3s ease;
             font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
 
         .btn-save:hover {
@@ -182,25 +207,16 @@
                 overflow-x: auto;
             }
 
-            table {
-                display: block;
-                overflow-x: auto;
-            }
-
             thead {
                 display: none;
             }
 
-            tbody {
-                display: block;
-            }
-
             tbody tr {
                 display: grid;
-                grid-template-columns: auto 1fr auto;
+                grid-template-columns: auto 1fr;
                 grid-template-areas: 
-                    "id nombre nombre"
-                    "actions actions actions";
+                    "id nombre"
+                    "actions actions";
                 gap: 12px;
                 padding: 16px;
                 margin-bottom: 12px;
@@ -235,6 +251,11 @@
 
             .btn-edit, .btn-delete {
                 width: 100%;
+                justify-content: center;
+            }
+
+            .search-bar {
+                padding: 16px;
             }
         }
 
@@ -280,7 +301,7 @@
 
     <!-- Main Content -->
     <div class="main-content" id="mainContent">
-        <button class="sidebar-toggle" onclick="toggleSidebar()">
+        <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">
             <span class="material-icons">menu</span>
         </button>
 
@@ -300,7 +321,7 @@
 
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="🔍 Buscar clientes..." 
-                       onkeyup="filterClientes()">
+                       onkeyup="filterClientes()" aria-label="Buscar clientes">
             </div>
 
             <div class="table-container">
@@ -323,19 +344,19 @@
     </div>
 
     <!-- Client Modal -->
-    <div id="clienteModal" class="modal">
+    <div id="clienteModal" class="modal" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>
+                <h2 id="modalTitle">
                     <span class="material-icons" id="modalIcon">person_add</span>
-                    <span id="modalTitle">Nuevo Cliente</span>
+                    <span id="modalTitleText">Nuevo Cliente</span>
                 </h2>
-                <button class="btn-close" onclick="closeModal()">&times;</button>
+                <button class="btn-close" onclick="closeModal()" aria-label="Cerrar modal">&times;</button>
             </div>
             <form id="clienteForm">
                 <input type="hidden" id="clienteId">
                 <div class="form-group">
-                    <label>Nombre del Cliente *</label>
+                    <label for="clienteName">Nombre del Cliente *</label>
                     <input type="text" id="clienteName" required 
                            placeholder="Ingrese el nombre completo">
                 </div>
@@ -356,9 +377,7 @@
 
         function toggleSidebar() {
             const sidebar = document.querySelector('.sidebar');
-            const mainContent = document.getElementById('mainContent');
             sidebar.classList.toggle('active');
-            mainContent.classList.toggle('sidebar-hidden');
         }
 
         function checkAuth() {
@@ -428,11 +447,11 @@
                     <td class="cliente-nombre">${c.nombClie}</td>
                     <td>
                         <div class="action-buttons">
-                            <button class="btn-edit" onclick="editCliente(${c.codiClie})">
+                            <button class="btn-edit" onclick="editCliente(${c.codiClie})" aria-label="Editar ${c.nombClie}">
                                 <span class="material-icons">edit</span>
                                 Editar
                             </button>
-                            <button class="btn-delete" onclick="deleteCliente(${c.codiClie})">
+                            <button class="btn-delete" onclick="deleteCliente(${c.codiClie})" aria-label="Eliminar ${c.nombClie}">
                                 <span class="material-icons">delete</span>
                                 Eliminar
                             </button>
@@ -452,20 +471,26 @@
         }
 
         function openModal(id = null) {
-            document.getElementById('clienteModal').classList.add('active');
+            const modal = document.getElementById('clienteModal');
+            modal.classList.add('active');
             document.getElementById('clienteForm').reset();
             
             if (id) {
                 const cliente = clientes.find(c => c.codiClie === id);
-                document.getElementById('modalTitle').textContent = 'Editar Cliente';
+                document.getElementById('modalTitleText').textContent = 'Editar Cliente';
                 document.getElementById('modalIcon').textContent = 'edit';
                 document.getElementById('clienteId').value = cliente.codiClie;
                 document.getElementById('clienteName').value = cliente.nombClie;
             } else {
-                document.getElementById('modalTitle').textContent = 'Nuevo Cliente';
+                document.getElementById('modalTitleText').textContent = 'Nuevo Cliente';
                 document.getElementById('modalIcon').textContent = 'person_add';
                 document.getElementById('clienteId').value = '';
             }
+            
+            // Focus en el input
+            setTimeout(() => {
+                document.getElementById('clienteName').focus();
+            }, 100);
         }
 
         function closeModal() {
@@ -477,7 +502,8 @@
         }
 
         async function deleteCliente(id) {
-            if (!confirm('¿Estás seguro de eliminar este cliente?')) return;
+            const cliente = clientes.find(c => c.codiClie === id);
+            if (!confirm(`¿Estás seguro de eliminar al cliente "${cliente.nombClie}"?`)) return;
 
             const token = sessionStorage.getItem('token');
             try {
@@ -502,7 +528,7 @@
             const id = document.getElementById('clienteId').value;
             
             const data = {
-                nombClie: document.getElementById('clienteName').value
+                nombClie: document.getElementById('clienteName').value.trim()
             };
 
             try {
@@ -540,13 +566,22 @@
             setTimeout(() => alert.remove(), 4000);
         }
 
+        // Cerrar sidebar al hacer click fuera
         document.addEventListener('click', function(event) {
             const sidebar = document.querySelector('.sidebar');
             const toggle = document.querySelector('.sidebar-toggle');
             
-            if (!sidebar.contains(event.target) && !toggle.contains(event.target) && window.innerWidth <= 768) {
+            if (sidebar.classList.contains('active') && 
+                !sidebar.contains(event.target) && 
+                !toggle.contains(event.target)) {
                 sidebar.classList.remove('active');
-                document.getElementById('mainContent').classList.remove('sidebar-hidden');
+            }
+        });
+
+        // Cerrar modal con tecla Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
             }
         });
 

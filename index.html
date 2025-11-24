@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
-        .login-container {
+        body {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -15,18 +15,13 @@
             padding: 20px;
         }
 
-        .login-card {
-            background: #1a1a1a;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.7);
-            padding: 48px;
+        .login-container {
             width: 100%;
             max-width: 420px;
-            border: 1px solid #333;
-            animation: slideIn 0.5s ease-out;
+            animation: fadeIn 0.5s ease-out;
         }
 
-        @keyframes slideIn {
+        @keyframes fadeIn {
             from {
                 opacity: 0;
                 transform: translateY(-20px);
@@ -35,6 +30,14 @@
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
+
+        .login-card {
+            background: #1a1a1a;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.7);
+            padding: 48px;
+            border: 1px solid #333;
         }
 
         .login-header {
@@ -51,7 +54,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 40px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
             border: 2px solid #333;
         }
@@ -102,7 +104,7 @@
             cursor: not-allowed;
         }
 
-        .loading {
+        .loading-spinner {
             display: inline-block;
             width: 14px;
             height: 14px;
@@ -127,7 +129,7 @@
             }
 
             .logo .material-icons {
-                font-size: 32px;
+                font-size: 36px;
             }
 
             .login-header h1 {
@@ -147,24 +149,24 @@
                 <p>Sistema de Gestión de Inventario</p>
             </div>
 
-            <div id="alert" class="alert" style="display: none;"></div>
+            <div id="alertContainer"></div>
 
             <form id="loginForm">
                 <div class="form-group">
                     <label for="login">Usuario</label>
                     <input type="text" id="login" name="login" required 
-                           placeholder="Ingrese su usuario" autocomplete="username">
+                        placeholder="Ingrese su usuario" autocomplete="username">
                 </div>
 
                 <div class="form-group">
                     <label for="password">Contraseña</label>
                     <input type="password" id="password" name="password" required 
-                           placeholder="Ingrese su contraseña" autocomplete="current-password">
+                        placeholder="Ingrese su contraseña" autocomplete="current-password">
                 </div>
 
                 <button type="submit" class="btn-login" id="btnLogin">
                     <span id="loginText">Iniciar Sesión</span>
-                    <span id="loginLoading" class="loading" style="display: none;"></span>
+                    <span id="loginLoading" class="loading-spinner" style="display: none;"></span>
                 </button>
             </form>
         </div>
@@ -175,7 +177,6 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('loginForm').reset();
-            hideAlert();
         });
 
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -195,7 +196,6 @@
             btnLogin.disabled = true;
             loginText.textContent = 'Iniciando sesión...';
             loginLoading.style.display = 'inline-block';
-            hideAlert();
 
             try {
                 const response = await fetch(`${API_URL}/auth/login`, {
@@ -236,7 +236,6 @@
         window.addEventListener('pageshow', function(event) {
             if (event.persisted) {
                 document.getElementById('loginForm').reset();
-                hideAlert();
             }
         });
 
@@ -245,15 +244,11 @@
         }
 
         function showAlert(message, type) {
-            const alert = document.getElementById('alert');
-            alert.textContent = message;
+            const alert = document.createElement('div');
             alert.className = `alert alert-${type}`;
-            alert.style.display = 'block';
-        }
-
-        function hideAlert() {
-            const alert = document.getElementById('alert');
-            alert.style.display = 'none';
+            alert.textContent = message;
+            document.getElementById('alertContainer').appendChild(alert);
+            setTimeout(() => alert.remove(), 4000);
         }
     </script>
 </body>
