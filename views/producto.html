@@ -215,6 +215,10 @@
             gap: 8px;
         }
 
+        .modal-header h2 .material-icons {
+            color: #F19E39;
+        }
+
         .btn-close {
             background: #333333;
             border: none;
@@ -277,41 +281,11 @@
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
             background: #2563eb;
         }
-
-        @media (max-width: 768px) {
-            .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-                gap: 16px;
-            }
-
-            .product-name {
-                font-size: 16px;
-                min-height: auto;
-            }
-
-            .product-price {
-                font-size: 20px;
-            }
-
-            .modal-content {
-                padding: 20px;
-            }
-
-            .modal-header h2 {
-                font-size: 18px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
-        }
     </style>
 </head>
 <body>
     <!-- Sidebar Navigation -->
-    <nav class="sidebar">
+    <nav class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <span class="material-icons">inventory_2</span>
             <span class="sidebar-brand">Team3System</span>
@@ -331,6 +305,13 @@
             </a>
         </div>
         <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <div class="user-details">
+                    <div class="user-label">Usuario activo</div>
+                    <div class="user-name" id="userName">Cargando...</div>
+                </div>
+            </div>
             <button class="btn-logout" onclick="logout()">
                 <span class="material-icons">logout</span>
                 <span>Cerrar Sesión</span>
@@ -340,8 +321,8 @@
 
     <!-- Main Content -->
     <div class="main-content" id="mainContent">
-        <button class="sidebar-toggle" onclick="toggleSidebar()">
-            <span class="material-icons">menu</span>
+        <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" aria-label="Toggle menu">
+            <span class="material-icons">left_panel_close</span>
         </button>
 
         <div class="container">
@@ -441,10 +422,20 @@
         let imageObserver = null;
 
         function toggleSidebar() {
-            const sidebar = document.querySelector('.sidebar');
+            const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('mainContent');
-            sidebar.classList.toggle('active');
-            mainContent.classList.toggle('sidebar-hidden');
+            const toggleBtn = document.getElementById('sidebarToggle');
+            const toggleIcon = toggleBtn.querySelector('.material-icons');
+            
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('sidebar-collapsed');
+            toggleBtn.classList.toggle('sidebar-collapsed');
+            
+            if (sidebar.classList.contains('collapsed')) {
+                toggleIcon.textContent = 'left_panel_open';
+            } else {
+                toggleIcon.textContent = 'left_panel_close';
+            }
         }
 
         function checkAuth() {
@@ -454,6 +445,15 @@
                 return false;
             }
             return true;
+        }
+
+        function loadUserInfo() {
+            const username = sessionStorage.getItem('username');
+            if (username) {
+                document.getElementById('userName').textContent = username;
+                const initial = username.charAt(0).toUpperCase();
+                document.getElementById('userAvatar').textContent = initial;
+            }
         }
 
         function logout() {
@@ -477,7 +477,6 @@
             return 'Error desconocido';
         }
 
-        // Función para inicializar el Intersection Observer para lazy loading
         function initImageObserver() {
             if (imageObserver) {
                 imageObserver.disconnect();
@@ -912,6 +911,14 @@
             setTimeout(() => alert.remove(), 4000);
         }
 
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                if (!sessionStorage.getItem('token')) {
+                    window.location.href = 'index.html';
+                }
+            }
+        });
+
         document.addEventListener('click', function(event) {
             const sidebar = document.querySelector('.sidebar');
             const toggle = document.querySelector('.sidebar-toggle');
@@ -922,20 +929,13 @@
             }
         });
 
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted) {
-                if (!sessionStorage.getItem('token')) {
-                    window.location.href = 'index.html';
-                }
-            }
-        });
-
         window.addEventListener('beforeunload', () => {
             imageControllers.forEach(controller => controller.abort());
             imageCache.forEach(url => URL.revokeObjectURL(url));
         });
 
         if (checkAuth()) {
+            loadUserInfo();
             loadProductos();
         }
     </script>

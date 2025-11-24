@@ -1,0 +1,41 @@
+<!-- views/dashboard.html - contenido puro -->
+<div class="page-header">
+  <div>
+    <h1>
+      <span class="material-icons">dashboard</span>
+      Dashboard
+    </h1>
+    <p style="color: #cccccc; margin-top: 8px;">Resumen del sistema de gestión</p>
+  </div>
+</div>
+
+<div class="stats-grid" id="statsGrid">
+  <div class="stat-card">
+    <div class="stat-icon"><span class="material-icons">inventory</span></div>
+    <div class="stat-label">Total Productos</div>
+    <div class="stat-value" id="totalProductos">0</div>
+    <div class="stat-change">Sistema actualizado</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon"><span class="material-icons">people</span></div>
+    <div class="stat-label">Total Clientes</div>
+    <div class="stat-value" id="totalClientes">0</div>
+    <div class="stat-change">Base de datos sincronizada</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon"><span class="material-icons">image</span></div>
+    <div class="stat-label">Productos con Imagen</div>
+    <div class="stat-value" id="productosConImagen">0</div>
+    <div class="stat-change">Almacenamiento disponible</div>
+  </div>
+</div>
+
+<div class="quick-actions">
+  <h2><span class="material-icons">flash_on</span>Acciones Rápidas</h2>
+  <div class="actions-grid">
+    <a href="#producto" class="action-btn"><span class="material-icons">inventory</span><span>Productos</span></a>
+    <a href="#cliente" class="action-btn"><span class="material-icons">people</span><span>Clientes</span></a>
+  </div>
+</div>

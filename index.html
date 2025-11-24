@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Team3System</title>
+
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+
     <style>
         body {
             display: flex;
@@ -22,14 +24,8 @@
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .login-card {
@@ -99,10 +95,7 @@
             background: #2563eb;
         }
 
-        .btn-login:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
+        .btn-login:disabled { opacity: 0.7; cursor: not-allowed; }
 
         .loading-spinner {
             display: inline-block;
@@ -114,30 +107,10 @@
             animation: spin 0.6s linear infinite;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 480px) {
-            .login-card {
-                padding: 32px 24px;
-            }
-
-            .logo {
-                width: 64px;
-                height: 64px;
-            }
-
-            .logo .material-icons {
-                font-size: 36px;
-            }
-
-            .login-header h1 {
-                font-size: 28px;
-            }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
+
 <body>
     <div class="login-container">
         <div class="login-card">
@@ -154,14 +127,14 @@
             <form id="loginForm">
                 <div class="form-group">
                     <label for="login">Usuario</label>
-                    <input type="text" id="login" name="login" required 
-                        placeholder="Ingrese su usuario" autocomplete="username">
+                    <input type="text" id="login" name="login" required autocomplete="username"
+                        placeholder="Ingrese su usuario">
                 </div>
 
                 <div class="form-group">
                     <label for="password">Contraseña</label>
-                    <input type="password" id="password" name="password" required 
-                        placeholder="Ingrese su contraseña" autocomplete="current-password">
+                    <input type="password" id="password" name="password" required autocomplete="current-password"
+                        placeholder="Ingrese su contraseña">
                 </div>
 
                 <button type="submit" class="btn-login" id="btnLogin">
@@ -175,34 +148,40 @@
     <script>
         const API_URL = 'https://backend.tpdteam3.com/backend/api';
 
-        document.addEventListener('DOMContentLoaded', function() {
+        // Reset visual
+        document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('loginForm').reset();
         });
 
+        // Redirección si ya está logueado → al SPA
+        if (sessionStorage.getItem('token')) {
+            window.location.href = 'app.html#dashboard';
+        }
+
+        // Manejo del login
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const login = document.getElementById('login').value.trim();
             const password = document.getElementById('password').value;
-            const btnLogin = document.getElementById('btnLogin');
-            const loginText = document.getElementById('loginText');
-            const loginLoading = document.getElementById('loginLoading');
+
+            const btn = document.getElementById('btnLogin');
+            const txt = document.getElementById('loginText');
+            const spinner = document.getElementById('loginLoading');
 
             if (!login || !password) {
                 showAlert('Por favor complete todos los campos', 'error');
                 return;
             }
 
-            btnLogin.disabled = true;
-            loginText.textContent = 'Iniciando sesión...';
-            loginLoading.style.display = 'inline-block';
+            btn.disabled = true;
+            txt.textContent = 'Iniciando sesión...';
+            spinner.style.display = 'inline-block';
 
             try {
                 const response = await fetch(`${API_URL}/auth/login`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ login, password })
                 });
 
@@ -211,43 +190,42 @@
                 if (response.ok && data.resultado === 'Ok') {
                     sessionStorage.setItem('token', data.token);
                     sessionStorage.setItem('username', login);
-                    
+
                     showAlert('¡Bienvenido! Redirigiendo...', 'success');
                     document.getElementById('loginForm').reset();
-                    
+
                     setTimeout(() => {
-                        window.location.href = 'dashboard.html';
+                        window.location.href = 'app.html#dashboard';
                     }, 800);
+
                 } else {
-                    const errorMsg = data.mensaje || 'Credenciales incorrectas';
-                    showAlert(errorMsg, 'error');
-                    btnLogin.disabled = false;
-                    loginText.textContent = 'Iniciar Sesión';
-                    loginLoading.style.display = 'none';
+                    showAlert(data.mensaje || 'Credenciales incorrectas', 'error');
+                    btn.disabled = false;
+                    txt.textContent = 'Iniciar Sesión';
+                    spinner.style.display = 'none';
                 }
+
             } catch (error) {
-                showAlert('Error de conexión. Verifica que el servidor esté disponible.', 'error');
-                btnLogin.disabled = false;
-                loginText.textContent = 'Iniciar Sesión';
-                loginLoading.style.display = 'none';
+                showAlert('Error de conexión. Verifique el servidor.', 'error');
+                btn.disabled = false;
+                txt.textContent = 'Iniciar Sesión';
+                spinner.style.display = 'none';
             }
         });
 
-        window.addEventListener('pageshow', function(event) {
+        window.addEventListener('pageshow', (event) => {
             if (event.persisted) {
                 document.getElementById('loginForm').reset();
             }
         });
 
-        if (sessionStorage.getItem('token')) {
-            window.location.href = 'dashboard.html';
-        }
-
+        // Alertas
         function showAlert(message, type) {
             const alert = document.createElement('div');
             alert.className = `alert alert-${type}`;
             alert.textContent = message;
             document.getElementById('alertContainer').appendChild(alert);
+
             setTimeout(() => alert.remove(), 4000);
         }
     </script>

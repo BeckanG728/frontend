@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Team3System — App</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Sidebar (permanente en app.html para que no se recargue) -->
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <span class="material-icons">inventory_2</span>
+        <span class="sidebar-brand">Team3System</span>
+      </div>
+      <div class="sidebar-menu" id="sidebarMenu">
+        <a href="#dashboard" class="nav-item" data-view="dashboard">
+          <span class="material-icons">dashboard</span><span>Dashboard</span>
+        </a>
+        <a href="#producto" class="nav-item" data-view="producto">
+          <span class="material-icons">inventory</span><span>Productos</span>
+        </a>
+        <a href="#cliente" class="nav-item" data-view="cliente">
+          <span class="material-icons">people</span><span>Clientes</span>
+        </a>
+      </div>
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar" id="userAvatar">U</div>
+          <div class="user-details">
+            <div class="user-label">Usuario activo</div>
+            <div class="user-name" id="userName">Cargando...</div>
+          </div>
+        </div>
+        <button class="btn-logout" id="btnLogout">
+          <span class="material-icons">logout</span><span>Cerrar Sesión</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Main content area where views are injected -->
+    <div class="main-content" id="mainContent">
+      <button
+        class="sidebar-toggle"
+        id="sidebarToggle"
+        aria-label="Toggle menu"
+      >
+        <span class="material-icons">left_panel_close</span>
+      </button>
+
+      <main id="view" class="container" tabindex="-1">
+        <!-- Vistas se cargarán aquí -->
+      </main>
+    </div>
+
+    <script type="module" src="scripts/app.js"></script>
+  </body>
+</html>

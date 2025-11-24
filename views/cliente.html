@@ -1,0 +1,43 @@
+<!-- views/cliente.html - contenido puro -->
+<div class="page-header">
+  <h1><span class="material-icons">people</span>Clientes</h1>
+  <button class="btn-primary" id="btnNewClient"><span class="material-icons">add</span>Nuevo Cliente</button>
+</div>
+
+<div id="alertContainer"></div>
+
+<div class="search-bar">
+  <input type="text" id="searchInput" placeholder="🔍 Buscar clientes..." aria-label="Buscar clientes">
+</div>
+
+<div class="table-container">
+  <table id="clientesTable">
+    <thead>
+      <tr><th>ID</th><th>Nombre del Cliente</th><th>Acciones</th></tr>
+    </thead>
+    <tbody id="clientesBody">
+      <tr><td colspan="3" class="loading">Cargando clientes...</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Client Modal -->
+<div id="clienteModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 id="modalTitle"><span class="material-icons" id="modalIcon">person_add</span><span id="modalTitleText">Nuevo Cliente</span></h2>
+      <button class="btn-close" id="clienteModalClose">&times;</button>
+    </div>
+    <form id="clienteForm">
+      <input type="hidden" id="clienteId">
+      <div class="form-group">
+        <label for="clienteName">Nombre del Cliente *</label>
+        <input type="text" id="clienteName" required placeholder="Ingrese el nombre completo">
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" id="clienteFormCancel">Cancelar</button>
+        <button type="submit" class="btn-save"><span class="material-icons">save</span>Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
