@@ -50,6 +50,63 @@ function handleLogout() {
 }
 
 /**
+ * Detecta si está en modo móvil
+ * @returns {boolean}
+ */
+function isMobile() {
+  return window.innerWidth <= 768;
+}
+
+/**
+ * Cierra el menú móvil
+ */
+function closeMobileMenu() {
+  const sidebar = qs('#sidebar');
+  const overlay = qs('.sidebar-overlay');
+  
+  if (sidebar) {
+    sidebar.classList.remove('mobile-open');
+  }
+  
+  if (overlay) {
+    overlay.classList.remove('active');
+  }
+  
+  document.body.classList.remove('menu-open');
+}
+
+/**
+ * Abre el menú móvil
+ */
+function openMobileMenu() {
+  const sidebar = qs('#sidebar');
+  const overlay = qs('.sidebar-overlay');
+  
+  if (sidebar) {
+    sidebar.classList.add('mobile-open');
+  }
+  
+  if (overlay) {
+    overlay.classList.add('active');
+  }
+  
+  document.body.classList.add('menu-open');
+}
+
+/**
+ * Toggle del menú móvil
+ */
+function toggleMobileMenu() {
+  const sidebar = qs('#sidebar');
+  
+  if (sidebar && sidebar.classList.contains('mobile-open')) {
+    closeMobileMenu();
+  } else {
+    openMobileMenu();
+  }
+}
+
+/**
  * Maneja el comportamiento del sidebar colapsable
  */
 function attachSidebarHandlers() {
@@ -61,24 +118,60 @@ function attachSidebarHandlers() {
 
   if (!toggleBtn) return;
 
-  toggleBtn.addEventListener('click', () => {
-    const collapsed = sidebar.classList.toggle('collapsed');
-    mainContent.classList.toggle('sidebar-collapsed');
+  // Crear overlay para móvil
+  if (!qs('.sidebar-overlay')) {
+    const overlay = document.createElement('div');
+    overlay.className = 'sidebar-overlay';
+    overlay.addEventListener('click', closeMobileMenu);
+    document.body.appendChild(overlay);
+  }
 
-    if (collapsed) {
-      // Sidebar colapsado
-      toggleIcon.textContent = 'chevron_right';
-      toggleBtn.setAttribute('title', 'Expandir menú');
-      toggleBtn.setAttribute('aria-label', 'Expandir menú');
-      logo.style.opacity = '0';
+  toggleBtn.addEventListener('click', () => {
+    if (isMobile()) {
+      // Comportamiento móvil: toggle menú hamburguesa
+      toggleMobileMenu();
     } else {
-      // Sidebar expandido
-      toggleIcon.textContent = 'chevron_left';
-      toggleBtn.setAttribute('title', 'Colapsar menú');
-      toggleBtn.setAttribute('aria-label', 'Colapsar menú');
-      logo.style.opacity = '1';
+      // Comportamiento desktop: colapsar sidebar
+      const collapsed = sidebar.classList.toggle('collapsed');
+      mainContent.classList.toggle('sidebar-collapsed');
+
+      if (collapsed) {
+        toggleIcon.textContent = 'chevron_right';
+        toggleBtn.setAttribute('title', 'Expandir menú');
+        toggleBtn.setAttribute('aria-label', 'Expandir menú');
+        logo.style.opacity = '0';
+      } else {
+        toggleIcon.textContent = 'chevron_left';
+        toggleBtn.setAttribute('title', 'Colapsar menú');
+        toggleBtn.setAttribute('aria-label', 'Colapsar menú');
+        logo.style.opacity = '1';
+      }
     }
   });
+
+  // Actualizar ícono según el tamaño de pantalla
+  const updateToggleIcon = () => {
+    if (isMobile()) {
+      // En móvil, siempre mostrar hamburguesa o X
+      if (sidebar.classList.contains('mobile-open')) {
+        toggleIcon.textContent = 'close';
+      } else {
+        toggleIcon.textContent = 'menu';
+      }
+    } else {
+      // En desktop, mostrar chevron según estado
+      closeMobileMenu(); // Cerrar menú si se cambia a desktop
+      if (sidebar.classList.contains('collapsed')) {
+        toggleIcon.textContent = 'chevron_right';
+      } else {
+        toggleIcon.textContent = 'chevron_left';
+      }
+    }
+  };
+
+  // Actualizar al cargar y al redimensionar
+  updateToggleIcon();
+  window.addEventListener('resize', updateToggleIcon);
 
   // Navegación SPA
   const sidebarMenu = qs('#sidebarMenu');
@@ -91,6 +184,11 @@ function attachSidebarHandlers() {
       if (view) {
         location.hash = `#${view}`;
         e.preventDefault();
+        
+        // Cerrar menú móvil al navegar
+        if (isMobile()) {
+          closeMobileMenu();
+        }
       }
     });
   }
